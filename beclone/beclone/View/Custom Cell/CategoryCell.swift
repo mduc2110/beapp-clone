@@ -93,8 +93,6 @@ class CategoryCell : UICollectionViewCell {
             if let safeLabel = ca.label {
                 newLabel = 1
                 self.topLabel.text = safeLabel.vi
-            }else {
-                print("err")
             }
             
             initView(promoted: ca.promoted, isNew: newLabel)

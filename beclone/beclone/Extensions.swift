@@ -50,11 +50,28 @@ extension UIView {
         layer.addSublayer(border)
     }
     
-    
     func setBottomBorder(color : UIColor) {
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
         self.layer.opacity = 1.0
         self.layer.cornerRadius = 0
     }
+    
+}
+
+protocol UITextColor {
+    func setBeDarkColor()
+    func setBeLightColor()
+}
+
+extension UILabel : UITextColor {
+    func setBeDarkColor() {
+        self.textColor = UIColor(red: 8/255, green: 31/255, blue: 66/255, alpha: 1)
+    }
+    
+    func setBeLightColor() {
+        self.textColor = .white
+    }
+    
+    
 }
