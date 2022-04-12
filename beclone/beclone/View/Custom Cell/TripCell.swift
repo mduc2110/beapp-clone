@@ -92,6 +92,13 @@ class TripCell : UICollectionViewCell, UICollectionViewDelegate {
         return addButtonView
     }()
     
+    private lazy var bottomLine : UIView = {
+        let bottomLine = UIView()
+        bottomLine.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1)
+        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        return bottomLine
+    }()
+    
     //UI Button
     private lazy var addButton : UIButton = {
         var button = UIButton()
@@ -164,7 +171,7 @@ class TripCell : UICollectionViewCell, UICollectionViewDelegate {
     func initView() {
         currentAddressView.addSubview(currentAddressIcon)
         currentAddressView.addSubview(currentAddressTextField)
-        
+        currentAddressView.addSubview(bottomLine)
         contentView.addSubview(currentAddressView)
         
         
@@ -204,6 +211,7 @@ class TripCell : UICollectionViewCell, UICollectionViewDelegate {
         
         setTextFieldConstraint(with: currentAddressTextField, to: currentAddressView)
         setIconConstraint(with: currentAddressIcon, to: currentAddressView, width: 22.37, height: 17.16)
+        setBottomLineContraints()
     }
     
     func configDestinationAddressView() {
@@ -241,6 +249,16 @@ class TripCell : UICollectionViewCell, UICollectionViewDelegate {
         ]
         NSLayoutConstraint.activate(textFieldConstraints)
     }
+    
+    func setBottomLineContraints() {
+        NSLayoutConstraint.activate([
+            bottomLine.widthAnchor.constraint(equalTo: currentAddressTextField.widthAnchor),
+            bottomLine.heightAnchor.constraint(equalToConstant: 1),
+            bottomLine.bottomAnchor.constraint(equalTo: currentAddressView.bottomAnchor),
+            bottomLine.rightAnchor.constraint(equalTo: currentAddressTextField.rightAnchor)
+        ])
+    }
+    
     func setIconConstraint(with iconElement : UIView, to parentView : UIView, width : CGFloat, height : CGFloat) {
         let currentAddressIconConstraints = [
             iconElement.leftAnchor.constraint(equalTo: parentView.leftAnchor, constant: 17),

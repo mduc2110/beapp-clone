@@ -107,13 +107,64 @@ struct HomeScreenManager {
     func convertRawDataToModel(dataArray : [[String : Any]]) -> [SessionModel?] {
         let sessionsModel = dataArray.map ({ (item) -> SessionModel? in
             if let id = item["id"] as? Int,
-               let name = item["name"] as? String,
-               let order = item["order"] as? Int,
-               let type = item["type"] as? String,
-//                   let data = item["data"] as? [String],
-               let metaData = item["meta_data"] as? [String: Any],
-               let hash = item["hash"] as? String {
-                return SessionModel(id: id, name: name, order: order, type: type, metaData: metaData,  hash: hash)
+                let name = item["name"] as? String,
+                let order = item["order"] as? Int,
+                let type = item["type"] as? String,
+                let data = item["data"] as? [[String : Any]],
+                let metaData = item["meta_data"] as? [String: Any],
+                let hash = item["hash"] as? String {
+                
+                
+            
+                let dataSession : [DataSessionModel?] = data.map({ (itemData) -> DataSessionModel? in
+                    if
+                        let type = itemData["@type"] as? String,
+                        let id = itemData["id"] as? Int,
+                        let name = itemData["name"] as? String,
+                        let order = itemData["order"] as? Int,
+                        let title = itemData["title"] as? [String : Any],
+                        let url = itemData["url"] as? String,
+                        let image = itemData["image"] as? String,
+                        let is_new = itemData["is_new"] as? Int,
+                        let is_enabled_label = itemData["is_enabled_label"] as? Int,
+                        let label = itemData["label"] as? [String : Any]?,
+                        let is_enabled = itemData["is_enabled"] as? Bool,
+                        let title_key = itemData["title_key"] as? String,
+                        let promoted = itemData["promoted"] as? Int,
+                        let need_updated = itemData["need_updated"] as? Bool {
+                        
+                        
+                        guard let vi = title["vi"] as? String else { return nil }
+                        guard let en = title["en"] as? String else { return nil }
+                        
+                        let decodedTitle : Title = Title(en: en, vi: vi)
+                        
+                        var decodedLabel : Label?
+                        
+                        if  let label = label,
+                            let vi = label["vi"] as? String,
+                            let en = label["en"] as? String {
+                            decodedLabel = Label(en: en, vi: vi)
+
+                        } else {
+                            decodedLabel = nil
+                        }
+                       
+                        return DataSessionModel(type: type, id: id, name: name, order: order, title: decodedTitle, url: url, image: image, is_new: is_new, is_enabled_label: is_enabled_label, label: decodedLabel, is_enabled: is_enabled, title_key: title_key, promoted: promoted, need_updated: need_updated)
+                    }else {
+                        return nil
+                    }
+                    
+                })
+                let unwrappedData : [DataSessionModel]?
+                
+                if dataSession.count > 0 {
+                    unwrappedData = dataSession.map { $0! }
+                }else {
+                    unwrappedData = nil
+                }
+                
+                return SessionModel(id: id, name: name, order: order, type: type, data: unwrappedData,  metaData: metaData,  hash: hash)
             }
             else {
                 return nil

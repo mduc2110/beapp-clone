@@ -65,8 +65,11 @@ class ViewController: UIViewController {
         homeScreenCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         homeScreenCollectionView.register(NativeBannerCell.self, forCellWithReuseIdentifier: NativeBannerCell.nativeBannerIdentifier)
         homeScreenCollectionView.register(TripCell.self, forCellWithReuseIdentifier: TripCell.tripCellIdentifier)
+        homeScreenCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.categoryCellIdentifier)
         
-        homeScreenCollectionView.register(CategoryHeaderView.self, forSupplementaryViewOfKind: suppId, withReuseIdentifier: secondIdentifier)
+//        homeScreenCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        
+//        homeScreenCollectionView.register(CategoryCell.self, forSupplementaryViewOfKind: suppId, withReuseIdentifier: secondIdentifier)
     
         homeScreenCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -75,7 +78,7 @@ class ViewController: UIViewController {
         homeScreenCollectionView.dataSource = self
         homeScreenCollectionView.delegate = self
         
-        homeScreenCollectionView.reloadData()
+//        homeScreenCollectionView.reloadData()
         return homeScreenCollectionView
     }()//closure
     
@@ -134,9 +137,11 @@ class ViewController: UIViewController {
         let trailingConstraint = NSLayoutConstraint(item: homeScreenCollectionView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0)
         NSLayoutConstraint.activate([topConstraint, leadingConstraint, bottomConstraint, trailingConstraint])
     }
+    
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 //        homeScreenCollectionView.frame = view.bounds
-        homeScreenCollectionView.reloadData()
+//        homeScreenCollectionView.reloadData()
     }
     
     
@@ -148,8 +153,8 @@ class ViewController: UIViewController {
 
          case 0: return self.bannerLayoutSection()
          case 1: return self.tripLayoutSection()
-         case 2: return self.secondLayoutSection()
-         default: return self.thirdLayoutSection()
+         case 2: return self.categoryLayoutSection()
+         default: return self.bannerLayoutSection()
          }
        }
     }
@@ -191,7 +196,7 @@ class ViewController: UIViewController {
 
         let section = NSCollectionLayoutSection(group: group)
 
-        section.orthogonalScrollingBehavior = .groupPaging
+        section.orthogonalScrollingBehavior = .groupPaging //horizontal scrolling
 
 //        let layout = UICollectionViewCompositionalLayout(section: section)
         
@@ -199,32 +204,77 @@ class ViewController: UIViewController {
     }
     
     
-    private func secondLayoutSection() -> NSCollectionLayoutSection {
+    private func categoryLayoutSection() -> NSCollectionLayoutSection {
+        let promoteItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(64/160 * 0.5))
+        
+        let promoteItem = NSCollectionLayoutItem(layoutSize: promoteItemSize)
+        promoteItem.contentInsets = .init(top: 16, leading: 4, bottom: 16, trailing: 4)
+        
+        let promoteGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(500))
+        
+        let promoteGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: promoteGroupSize,
+            subitem: promoteItem,
+            count: 2)
+        promoteGroup.contentInsets = .init(top: 0, leading: 12, bottom: 0, trailing: 12)
+        
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(170), heightDimension: .absolute(100))
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .absolute(100))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+//        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(16), top: .fixed(16), trailing: .flexible(16), bottom: .fixed(16))
+        item.contentInsets = .init(top: 0, leading: 16, bottom: 32, trailing: 16)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1000))
+        
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+//        group.contentInsets.bottom = 16
+        
+        //nested group
+        
+        let parentGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(400)),
+            subitems: [promoteGroup, group, group])
+//    subitems: [promoteGroup])
+//        parentGroup.contentInsets = .init(top: 0, leading: 0, bottom: 16, trailing: 0)
+        
+        let section = NSCollectionLayoutSection(group: parentGroup)
+        
+        
+        let sectionStyling = NSCollectionLayoutDecorationItem.background(elementKind: CategoryCell.decorationKind)
+        
+        section.decorationItems = [sectionStyling]
+//        section.contentInsets.leading = 15
+        
+//        section.orthogonalScrollingBehavior = .groupPaging //horizontal scrolling
+
+        return section
+    }
+    
+    private func horizontalLayoutSection() -> NSCollectionLayoutSection {
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .absolute(100))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 0, leading: 0, bottom: 15, trailing: 15)
+        item.contentInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(500))
         
-
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+        
         let section = NSCollectionLayoutSection(group: group)
         
         let sectionStyling = NSCollectionLayoutDecorationItem.background(elementKind: "background")
         
         section.decorationItems = [sectionStyling]
-        section.contentInsets.leading = 15
-
-        section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                  heightDimension: .estimated(44)),
-                elementKind: suppId,
-                alignment: .topLeading)
-        ]
+        
+//        section.orthogonalScrollingBehavior = .groupPaging
 
         return section
     }
@@ -260,7 +310,16 @@ extension ViewController : UICollectionViewDataSource {
             case 1:
                 return 1
             case 2:
-                return 20
+                if sessionsData.count > 0 {
+                    if let count = sessionsData[3].data?.count {
+                        return count > 10 ? 10 : count
+                    }
+                    else {
+                        return 0
+                    }
+                    
+                }
+                return 0
             default:
                 return 1
         }
@@ -276,20 +335,29 @@ extension ViewController : UICollectionViewDataSource {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NativeBannerCell.nativeBannerIdentifier, for: indexPath) as! NativeBannerCell
             if sessionsData.count > 0 {
-//                cell.backgroundColor = .white
                 if let nativeBannerImageUrl = sessionsData[0].metaData?["image"] {
-                    print(nativeBannerImageUrl)
                     cell.setImage(imageUrl: nativeBannerImageUrl as! String)
                 }
             }
             return cell
         } else if  indexPath.section == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TripCell.tripCellIdentifier, for: indexPath) as! TripCell
-//            cell.backgroundColor = .white
+            return cell
+        }
+        else if  indexPath.section == 2 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.categoryCellIdentifier, for: indexPath) as! CategoryCell
+            let cate : [DataSessionModel]? = sessionsData[3].data
+            if let c = cate {
+                cell.configure(category: c[indexPath.row])
+
+            } else {
+                print("Error")
+            }
+            
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
-            cell.backgroundColor = .lightGray
+//            cell.backgroundColor = .lightGray
             cell.layer.cornerRadius = 5
             return cell
         }
@@ -314,7 +382,7 @@ extension ViewController : UICollectionViewDelegate{
 extension ViewController: UICollectionViewDelegateFlowLayout {
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        let screenWidth = UIScreen.main.bounds.width - 10
-//        return CGSize(width: screenWidth, height: screenWidth)
+//        return CGSize(width: 200, height: screenWidth)
 //    }
 }
 
@@ -342,7 +410,6 @@ extension ViewController : HomeScreenManagerDelegate {
     
     func didGetSessionsList(sessionsData: [SessionModel]) {
         self.sessionsData = sessionsData
-        
         DispatchQueue.main.async {
             self.homeScreenCollectionView.reloadData()
         }

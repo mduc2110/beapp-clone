@@ -9,7 +9,7 @@ import Foundation
 
 
 struct DataSessionModel {
-//    let @type: String
+    let type: String
     let id: Int
     let name: String
     let order: Int
@@ -18,11 +18,15 @@ struct DataSessionModel {
     let image: String
     let is_new: Int
     let is_enabled_label: Int
-    let label: [String:Any]
+    let label: Label?
     let is_enabled: Bool
     let title_key: String
     let promoted: Int
     let need_updated: Bool
+    
+    
+    
+    
 //    let android_version: Int
 //    let ios_version: Int
 //    let max_android_version: Int
@@ -32,6 +36,10 @@ struct DataSessionModel {
 //    let disabled_image: String
 }
 
+struct Label {
+    let en : String
+    let vi : String
+}
 
 struct Title {
     let en: String

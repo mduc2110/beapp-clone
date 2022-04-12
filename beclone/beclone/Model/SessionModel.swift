@@ -13,7 +13,7 @@ struct SessionModel {
     let name: String
     let order: Int
     let type: String
-//    let data: [DataSessionModel]?
+    let data: [DataSessionModel]?
     let metaData: [String : Any]?
     let hash: String
 }
