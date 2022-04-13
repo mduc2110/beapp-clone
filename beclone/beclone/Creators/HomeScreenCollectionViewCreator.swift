@@ -18,6 +18,7 @@ class HomeScreenCollectionViewCreator {
          case 0: return self.bannerLayoutSection()
          case 1: return self.tripLayoutSection()
          case 2: return self.categoryLayoutSection()
+         case 3: return self.sliderLayoutSection()
          default: return self.bannerLayoutSection()
          }
        }
@@ -120,6 +121,25 @@ class HomeScreenCollectionViewCreator {
 
         return section
     }
+    
+    
+    
+    func sliderLayoutSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.33))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group : group)
+        
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        return section
+    }
+
     func thirdLayoutSection() -> NSCollectionLayoutSection {
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))

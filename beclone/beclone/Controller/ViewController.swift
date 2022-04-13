@@ -41,6 +41,8 @@ class ViewController: UIViewController {
         
         initHomeScreenView()
         
+        
+//        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
     }
 
     func initHomeScreenView() {
@@ -75,12 +77,20 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
+    @objc func slideToNext() {
+        
+        let section = homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
+        
+        currentCellIndex = currentCellIndex % 3
+        
+        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .bottom, animated: true)
+    }
     
 }
 
 extension ViewController : UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

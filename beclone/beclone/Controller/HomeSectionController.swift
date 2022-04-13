@@ -63,10 +63,33 @@ class HomeSectionController {
             }
             return cell
         }
+        else if indexPath.section == 3 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "hang", for: indexPath)
+//            cell.backgroundColor = .lightGray
+            cell.layer.cornerRadius = 6
+//            self?.view.backgroundColor = UIColor(patternImage: UIImage(data: imageData as Data)!)
+            cell.layer.masksToBounds = true
+            let imgAvatar = UIImageView(frame: CGRect(x: 0,y: 0, width : cell.contentView.bounds.width,height : cell.contentView.bounds.height))
+            imgAvatar.contentMode = .scaleToFill
+            imgAvatar.load(urlString: "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png")
+            cell.contentView.addSubview(imgAvatar)
+            return cell
+        }
         else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.initialCellIdentifier, for: indexPath)
             cell.layer.cornerRadius = 5
             return cell
+        }
+    }
+    enum SectionName {
+        case Banner, Transport, Services, Slider
+    }
+    func getIndexPathSection(sectionName : SectionName) -> Int{
+        switch sectionName {
+            case .Banner: return 0
+            case .Transport: return 1
+            case .Services: return 2
+            case .Slider: return 3
         }
     }
 }
