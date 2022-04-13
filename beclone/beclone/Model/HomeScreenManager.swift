@@ -180,6 +180,6 @@ struct HomeScreenManager {
     
     func setSessionData(sessionsData : [SessionModel?]) {
         let safeSessionData = sessionsData.compactMap { $0 }
-        self.delegate?.didGetSessionsList(sessionsData: safeSessionData)
+        self.delegate?.didGetSectionsList(sectionsData: safeSessionData)
     }
 }

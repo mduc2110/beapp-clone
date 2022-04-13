@@ -12,6 +12,9 @@
 		B92218E427FD8A670038A605 /* NativeBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218E327FD8A670038A605 /* NativeBannerCell.swift */; };
 		B998EECD27FE83F50069624C /* TripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EECC27FE83F50069624C /* TripCell.swift */; };
 		B998EED027FFF33E0069624C /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EECF27FFF33E0069624C /* CategoryCell.swift */; };
+		B998EED7280588AA0069624C /* HomeScreenCollectionViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EED6280588AA0069624C /* HomeScreenCollectionViewCreator.swift */; };
+		B998EEDA28058BE00069624C /* HomeSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EED928058BE00069624C /* HomeSectionController.swift */; };
+		B998EEDD280674050069624C /* UIHomeScreenCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EEDC280674040069624C /* UIHomeScreenCreator.swift */; };
 		B9E9DAF627FAF17400CEDC71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E9DAF527FAF17400CEDC71 /* AppDelegate.swift */; };
 		B9E9DAF827FAF17400CEDC71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E9DAF727FAF17400CEDC71 /* SceneDelegate.swift */; };
 		B9E9DAFA27FAF17400CEDC71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E9DAF927FAF17400CEDC71 /* ViewController.swift */; };
@@ -30,6 +33,9 @@
 		B92218E327FD8A670038A605 /* NativeBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeBannerCell.swift; sourceTree = "<group>"; };
 		B998EECC27FE83F50069624C /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 		B998EECF27FFF33E0069624C /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		B998EED6280588AA0069624C /* HomeScreenCollectionViewCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenCollectionViewCreator.swift; sourceTree = "<group>"; };
+		B998EED928058BE00069624C /* HomeSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSectionController.swift; sourceTree = "<group>"; };
+		B998EEDC280674040069624C /* UIHomeScreenCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHomeScreenCreator.swift; sourceTree = "<group>"; };
 		B9E9DAF227FAF17400CEDC71 /* beclone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beclone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E9DAF527FAF17400CEDC71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9E9DAF727FAF17400CEDC71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +71,23 @@
 			path = "Custom Cell";
 			sourceTree = "<group>";
 		};
+		B998EED5280588940069624C /* Creators */ = {
+			isa = PBXGroup;
+			children = (
+				B998EEDB280673F20069624C /* UI */,
+				B998EED6280588AA0069624C /* HomeScreenCollectionViewCreator.swift */,
+			);
+			path = Creators;
+			sourceTree = "<group>";
+		};
+		B998EEDB280673F20069624C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B998EEDC280674040069624C /* UIHomeScreenCreator.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
 		B9E9DAE927FAF17400CEDC71 = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +107,7 @@
 		B9E9DAF427FAF17400CEDC71 /* beclone */ = {
 			isa = PBXGroup;
 			children = (
+				B998EED5280588940069624C /* Creators */,
 				B9E9DB0F27FAF4FB00CEDC71 /* Controller */,
 				B9E9DB0E27FAF4F100CEDC71 /* View */,
 				B9E9DB0D27FAF4D600CEDC71 /* Model */,
@@ -122,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				B9E9DAF927FAF17400CEDC71 /* ViewController.swift */,
+				B998EED928058BE00069624C /* HomeSectionController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -200,13 +225,16 @@
 				B9E9DAFA27FAF17400CEDC71 /* ViewController.swift in Sources */,
 				B9E9DB1327FAF51F00CEDC71 /* HomeScreenManagerDelegate.swift in Sources */,
 				B92218E027FD72870038A605 /* SessionModel.swift in Sources */,
+				B998EED7280588AA0069624C /* HomeScreenCollectionViewCreator.swift in Sources */,
 				B9E9DAF627FAF17400CEDC71 /* AppDelegate.swift in Sources */,
 				B92218E427FD8A670038A605 /* NativeBannerCell.swift in Sources */,
 				B998EECD27FE83F50069624C /* TripCell.swift in Sources */,
+				B998EEDA28058BE00069624C /* HomeSectionController.swift in Sources */,
 				B92218E227FD77C00038A605 /* DataSessionModel.swift in Sources */,
 				B9E9DB1127FAF51000CEDC71 /* HomeScreenManager.swift in Sources */,
 				B9E9DB0C27FAF28B00CEDC71 /* Constants.swift in Sources */,
 				B9E9DAF827FAF17400CEDC71 /* SceneDelegate.swift in Sources */,
+				B998EEDD280674050069624C /* UIHomeScreenCreator.swift in Sources */,
 				B9E9DB0A27FAF27800CEDC71 /* Extensions.swift in Sources */,
 				B998EED027FFF33E0069624C /* CategoryCell.swift in Sources */,
 			);

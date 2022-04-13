@@ -59,19 +59,12 @@ class CategoryCell : UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        self.backgroundColor = .lightGray
         
-//        print(self.frame.size.width)
-//        self.layer.cornerRadius = self.frame.size.width / 2
-//        self.frame.size.width = 50
+        self.layer.cornerRadius = 6
+        self.backgroundColor = .white
         
         self.frame = CGRect(x: 0 , y: 0, width: 200, height: 200)
         self.bounds = CGRect(x: 0 , y: 0, width: 200, height: 200)
-//        initView()
-//        print(safeCategoryData.image)
-//        initView(isPromoted: 0)
-//        initPromotedCell()
-//        initView(promoted: 0, isNew: 0)
         
     }
     
@@ -81,12 +74,7 @@ class CategoryCell : UICollectionViewCell {
             categoryName.text = ca.title.vi
             
             if ca.promoted == 1 {
-                self.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1)
-                
-                self.categoryName.font = UIFont.boldSystemFont(ofSize: 14)
-                
-                
-                
+                setPromoteCellStyle()
             }
             
             var newLabel = 0
@@ -100,26 +88,24 @@ class CategoryCell : UICollectionViewCell {
 
     }
     
+    func setPromoteCellStyle() {
+        self.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1)
+        self.layer.cornerRadius = 6
+        self.categoryName.font = UIFont.boldSystemFont(ofSize: 14)
+    }
+    
     func initView(promoted : Int, isNew : Int) {
-        
-        
         contentView.addSubview(categoryImage)
         contentView.addSubview(categoryName)
-//        contentView.addSubview(isNewLabel)
-//        isNewLabel.translatesAutoresizingMaskIntoConstraints = false
         
         categoryName.translatesAutoresizingMaskIntoConstraints = false
         categoryImage.translatesAutoresizingMaskIntoConstraints = false
 
-//        let isPromoted = Bool(truncating: promoted as NSNumber)
-//
         configImageConstraints(isPromoted: promoted)
         configNameConstraints(isPromoted: promoted)
 
         
-        
         if isNew == 1 {
-            print("OK")
             contentView.addSubview(topLabel)
             topLabel.translatesAutoresizingMaskIntoConstraints = false
             configNewLabelConstraints()
@@ -135,7 +121,6 @@ class CategoryCell : UICollectionViewCell {
             categoryImage.widthAnchor.constraint(equalToConstant: 40),
         ]
         let promoteConstraints = [
-//            categoryImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             categoryImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
             categoryImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             categoryImage.heightAnchor.constraint(equalToConstant: 40),
@@ -146,13 +131,9 @@ class CategoryCell : UICollectionViewCell {
         } else {
             NSLayoutConstraint.activate(constraints)
         }
-        
-//        NSLayoutConstraint.activate(constraints)
     }
     
     func configNameConstraints(isPromoted : Int) {
-//        print(isPromoted)
-//        categoryName.removeFromSuperview()
         NSLayoutConstraint.deactivate(categoryName.constraints)
         
         let nameConstraints = [
@@ -165,32 +146,18 @@ class CategoryCell : UICollectionViewCell {
             categoryName.leftAnchor.constraint(equalTo: categoryImage.rightAnchor, constant: 12)
         ]
         if isPromoted == 1 {
-//            categoryName.clearConstraints(constraints: nameConstraints)
             NSLayoutConstraint.activate(promoteNameConstraints)
         } else {
-//            categoryName.clearConstraints(constraints: promoteNameConstraints)
             NSLayoutConstraint.activate(nameConstraints)
         }
-            
-//            NSLayoutConstraint.activate(constraints)
     }
 
     func configNewLabelConstraints() {
         let constraints = [
                 topLabel.topAnchor.constraint(equalTo: categoryImage.topAnchor, constant: -7),
-    //            isNewLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 15),
                 topLabel.centerXAnchor.constraint(equalTo: categoryImage.centerXAnchor, constant: (topLabel.frame.width + 20) / 2),
-    //            isNewLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
                 topLabel.widthAnchor.constraint(equalToConstant: topLabel.frame.width + 20),
-                topLabel.heightAnchor.constraint(equalToConstant: topLabel.frame.height + 2),
-                
-    //            isNewLabel.topAnchor.constraint(equalTo: categoryImage.topAnchor, constant: -7),
-    //            isNewLabel.rightAnchor.constraint(equalTo: categoryImage.rightAnchor, constant: 15),
-    //            isNewLabel.centerXAnchor.constraint(equalTo: centerXAnchor, constant: isNewLabel.frame.size.width / 2),
-                
-                
-    //            isNewLabel.widthAnchor.constraint(equalTo: categoryImage.widthAnchor),
-    //            isNewLabel.heightAnchor.constraint(equalToConstant: isNewLabel.frame.size.height + 3)
+                topLabel.heightAnchor.constraint(equalToConstant: topLabel.frame.height + 2)
             ]
         topLabel.clearConstraints(constraints: constraints)
         NSLayoutConstraint.activate(constraints)
@@ -213,10 +180,4 @@ extension UIView {
             self.removeConstraint(constraint)
         }
     }
-//    func clearConstraints(uiView : UIView, ) -> UIView{
-//        for constraint in constraints {
-//            uiView.removeConstraint(constraint)
-//        }
-//        return uiView
-//    }
 }
