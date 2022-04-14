@@ -144,7 +144,7 @@ extension ViewController : UICollectionViewDelegate{
 
 
 extension ViewController : HomeScreenManagerDelegate {
-    func didGetBackgroundForHomeScreen(urlBackground: String) {
+    func didSetBackgroundForHomeScreen(urlBackground: String) {
         DispatchQueue.main.async { [weak self] in
             let imageUrlString = urlBackground
             let imageUrl:URL = URL(string: imageUrlString)!

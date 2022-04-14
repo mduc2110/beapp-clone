@@ -175,7 +175,7 @@ struct HomeScreenManager {
     
     func setBackground(urlBackground : String) {
 //        print(urlBackground)
-        self.delegate?.didGetBackgroundForHomeScreen(urlBackground: urlBackground)
+        self.delegate?.didSetBackgroundForHomeScreen(urlBackground: urlBackground)
     }
     
     func setSessionData(sessionsData : [SessionModel?]) {
