@@ -65,12 +65,19 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 //        homeScreenCollectionView.frame = view.bounds
-        let section = homeSectionController?.getIndexPathSection(sectionName: .Services)
-
-        let c = self.homeScreenCollectionView?.cellForItem(at: IndexPath(item: 0, section: section ?? 4))
         
-        creator.getSectionHeight(c?.frame)
-//        print(c?.frame)
+        setHeightForGradientBackground()
+    }
+    
+    func setHeightForGradientBackground() {
+        guard let section = homeSectionController?.getIndexPathSection(sectionName: .Services) else { return }
+        
+        guard let collectionView = homeScreenCollectionView,
+              let cell = collectionView.cellForItem(at: IndexPath(item: 1, section: section))
+        else { return }
+        
+        let targetFrame = collectionView.convert(cell.frame, to: view)
+        creator.getSectionHeight(targetFrame)
     }
     
     func rootViewConstraints(_ rootView : UIView) {
@@ -125,6 +132,7 @@ extension ViewController : UICollectionViewDelegate{
 //        homeScreenCollectionView?.cellForItem(at: <#T##IndexPath#>)
         if scrollView == homeScreenCollectionView {
             let contentOffset = scrollView.contentOffset.y
+            creator.updateGradientBackgroundHeight(contentOffset)
             if(contentOffset >= view.safeAreaInsets.top + creator.getTopScreenInnerHeight()) {
                 creator.animateTopScreen()
             } else {

@@ -10,7 +10,12 @@ import UIKit
 
 class UIHomeScreenCreator {
     let parentController : ViewController?
+    
     let parentFrame : CGRect
+    
+    var topBackgroundConstraints : NSLayoutConstraint?
+    
+    var defaultGradientBackgroundHeight : CGFloat?
     
     init(parentController : ViewController, parentFrame : CGRect) {
         self.parentFrame = parentFrame
@@ -36,7 +41,7 @@ class UIHomeScreenCreator {
         collectionView.register(TripCell.self, forCellWithReuseIdentifier: TripCell.tripCellIdentifier)
         collectionView.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.categoryCellIdentifier)
         
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "hang")
+        collectionView.register(SliderCell.self, forCellWithReuseIdentifier: "hang")
     
         collectionView.collectionViewLayout = collectionViewCreator.createCompositionalLayout()// need to create compositional first
         
@@ -111,6 +116,14 @@ class UIHomeScreenCreator {
         return rootView
     }()
     
+    lazy var uiGradientBackground : UIView = {
+        let background = UIView()
+        background.translatesAutoresizingMaskIntoConstraints = false
+        background.backgroundColor = .white
+        background.layer.cornerRadius =  6
+//        rootView.backgroundColor = .orange
+        return background
+    }()
     
     func getView() -> UIView {
         
@@ -136,12 +149,29 @@ class UIHomeScreenCreator {
         //add inner to top screen UI
         topScreenView.addSubview(uiTopScreenInner)
         
+        uiRootView.addSubview(uiGradientBackground)
+        
         //add top screen to UI root view
         uiRootView.addSubview(topScreenView)
         
         
         //add top screen constraints
         addTopScreenConstraints()
+    }
+    
+    func addBackgroundConstraints(_ top : CGFloat) {
+        topBackgroundConstraints = uiGradientBackground.topAnchor.constraint(equalTo: uiRootView.topAnchor, constant: top)
+        
+        
+        let constraints = [
+            topBackgroundConstraints!,
+            uiGradientBackground.bottomAnchor.constraint(equalTo: uiRootView.bottomAnchor),
+            uiGradientBackground.leftAnchor.constraint(equalTo: uiRootView.leftAnchor),
+            uiGradientBackground.rightAnchor.constraint(equalTo: uiRootView.rightAnchor),
+            
+//            uiGradientBackground.topAnchor.constraint(equalTo: uiRootView.safeAreaLayoutGuide.topAnchor, constant: 0),
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
     
     func initCollectionHomeScreen() {
@@ -228,6 +258,7 @@ class UIHomeScreenCreator {
         UIView.animate(withDuration: 0.3) {
             self.topScreenView.backgroundColor = .white
             self.welcomeLabel.setBeDarkColor()
+            
             self.bePointAmount.setBeDarkColor()
         }
     }
@@ -237,5 +268,21 @@ class UIHomeScreenCreator {
             self.welcomeLabel.setBeLightColor()
             self.bePointAmount.setBeLightColor()
         }
+    }
+    
+    func getSectionHeight(_ sectionPosition : CGRect?) {
+        
+        if let safeHeight = sectionPosition?.origin.y {
+            //add inset
+            let safeHeightInset = safeHeight - 16
+            
+            defaultGradientBackgroundHeight = safeHeightInset
+            
+            addBackgroundConstraints(safeHeightInset)
+        }
+    }
+    
+    func updateGradientBackgroundHeight(_ contentOffset : CGFloat) {
+        topBackgroundConstraints?.constant = defaultGradientBackgroundHeight! - contentOffset
     }
 }
