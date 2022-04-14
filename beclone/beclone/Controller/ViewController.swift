@@ -41,8 +41,7 @@ class ViewController: UIViewController {
         
         initHomeScreenView()
         
-        
-//        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
     }
 
     func initHomeScreenView() {
@@ -55,15 +54,23 @@ class ViewController: UIViewController {
         homeScreenCollectionView = creator.getCollectionView()
         homeScreenCollectionView?.dataSource = self
         homeScreenCollectionView?.delegate = self
+        homeScreenCollectionView?.isPagingEnabled = true
         
         view.addSubview(rootView)
         
         rootViewConstraints(rootView)
+        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 //        homeScreenCollectionView.frame = view.bounds
+        let section = homeSectionController?.getIndexPathSection(sectionName: .Services)
+
+        let c = self.homeScreenCollectionView?.cellForItem(at: IndexPath(item: 0, section: section ?? 4))
+        
+        creator.getSectionHeight(c?.frame)
+//        print(c?.frame)
     }
     
     func rootViewConstraints(_ rootView : UIView) {
@@ -81,9 +88,9 @@ class ViewController: UIViewController {
         
         let section = homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
         
-        currentCellIndex = currentCellIndex % 3
+        currentCellIndex = (currentCellIndex + 1) % 3
         
-        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .bottom, animated: true)
+        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
     }
     
 }
@@ -99,7 +106,6 @@ extension ViewController : UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let initCell = collectionView.dequeueReusableCell(withReuseIdentifier: K.initialCellIdentifier, for: indexPath)
-        
         let cell = homeSectionController?.setupHomeScreenCell(collectionView, cellForItemAt: indexPath)
         
         return cell ?? initCell
@@ -116,7 +122,7 @@ extension ViewController : UICollectionViewDelegate{
        print("User tapped on item \(indexPath.row)")
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
+//        homeScreenCollectionView?.cellForItem(at: <#T##IndexPath#>)
         if scrollView == homeScreenCollectionView {
             let contentOffset = scrollView.contentOffset.y
             if(contentOffset >= view.safeAreaInsets.top + creator.getTopScreenInnerHeight()) {
@@ -145,9 +151,12 @@ extension ViewController : HomeScreenManagerDelegate {
     func didGetSectionsList(sectionsData: [SessionModel]) {
         self.sectionsData = sectionsData
         self.homeSectionController = HomeSectionController(sessionData: sectionsData)
-        DispatchQueue.main.async {
-            self.homeScreenCollectionView?.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.homeScreenCollectionView?.reloadData()
+            
+            
         }
+        
     }
 }
 
