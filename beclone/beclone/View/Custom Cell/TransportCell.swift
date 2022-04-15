@@ -8,47 +8,9 @@
 import Foundation
 import UIKit
 
-class AddressCollectionViewCell : UICollectionViewCell {
-    let label = UILabel()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    private func setupUI() {
-        //cell styling
-        self.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1)
-        self.layer.cornerRadius = 16
-        
-        //label styling
-        label.text = "Thêm nhà"
-        label.font = UIFont(name: "AvenirNext", size: 14)
-        label.textAlignment = .center
-        label.textColor = UIColor(red: 8/255, green: 31/255, blue: 66/255, alpha: 1)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        contentView.addSubview(label)
-        
-        //constraints
-        label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
-        label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
-        label.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
 
-        label.heightAnchor.constraint(equalToConstant: 32).isActive = true
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return label.sizeThatFits(size)
-    }
-}
 
-class TripCell : UICollectionViewCell, UICollectionViewDelegate {
+class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
     static let tripCellIdentifier : String = "tripCellIdentifier"
     
     let addressCellIdentifier = "addressCellIdentifier"
@@ -64,7 +26,7 @@ class TripCell : UICollectionViewCell, UICollectionViewDelegate {
 //        layout.itemSize = CGSize(width: 60, height: 32)
         var collectionView = UICollectionView(frame: contentView.frame, collectionViewLayout: layout)
         collectionView.alwaysBounceHorizontal = true
-        collectionView.register(AddressCollectionViewCell.self, forCellWithReuseIdentifier: addressCellIdentifier)
+        collectionView.register(LocationCell.self, forCellWithReuseIdentifier: addressCellIdentifier)
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -291,19 +253,19 @@ class TripCell : UICollectionViewCell, UICollectionViewDelegate {
 }
 
 
-extension TripCell : UICollectionViewDataSource {
+extension TransportCell : UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dummyAddress.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: addressCellIdentifier, for: indexPath) as! AddressCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: addressCellIdentifier, for: indexPath) as! LocationCell
         cell.label.text = dummyAddress[indexPath.row]
         return cell
     }
 }
 
-extension TripCell : UICollectionViewDelegateFlowLayout {
+extension TransportCell : UICollectionViewDelegateFlowLayout {
 //    public func collectionView(_ collectionView: UICollectionView,
 //                                   layout collectionViewLayout: UICollectionViewLayout,
 //                                   minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -320,7 +282,7 @@ extension TripCell : UICollectionViewDelegateFlowLayout {
 //        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
 //    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = AddressCollectionViewCell()
+        let cell = LocationCell()
 
         let viewSize = collectionView.bounds.size
 

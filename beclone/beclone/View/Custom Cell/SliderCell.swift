@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 class SliderCell : UICollectionViewCell {
+    static let sliderCellIdentifier = "sliderCellIdentifier"
+    
     lazy var imgBanner : UIImageView = {
         let img = UIImageView()
         img.load(urlString: "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png")

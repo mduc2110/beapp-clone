@@ -52,7 +52,7 @@ class HomeSectionController {
             }
             return cell
         } else if  indexPath.section == 1 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TripCell.tripCellIdentifier, for: indexPath) as! TripCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TransportCell.tripCellIdentifier, for: indexPath) as! TransportCell
             return cell
         }
         else if  indexPath.section == 2 {
@@ -64,7 +64,7 @@ class HomeSectionController {
             return cell
         }
         else if indexPath.section == 3 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "hang", for: indexPath) as! SliderCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SliderCell.sliderCellIdentifier, for: indexPath) as! SliderCell
             return cell
         }
         else {

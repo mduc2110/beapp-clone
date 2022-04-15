@@ -93,10 +93,7 @@ struct HomeScreenManager {
 //
 //
 //            })
-//
-//            if let session_1 = sessions[0] {
-//                print(session_1)
-//            }
+
             let sessionsModel = convertRawDataToModel(dataArray: array)
             
             setSessionData(sessionsData: sessionsModel)

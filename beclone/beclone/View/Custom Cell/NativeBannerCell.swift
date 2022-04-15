@@ -26,7 +26,6 @@ class NativeBannerCell : UICollectionViewCell {
         uiImage.load(urlString: imageUrl)
         
         contentView.addSubview(uiImage)
-
     }
     
     override func layoutSubviews() {

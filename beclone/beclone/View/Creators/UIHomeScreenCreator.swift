@@ -38,10 +38,10 @@ class UIHomeScreenCreator {
 
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: K.initialCellIdentifier)
         collectionView.register(NativeBannerCell.self, forCellWithReuseIdentifier: NativeBannerCell.nativeBannerIdentifier)
-        collectionView.register(TripCell.self, forCellWithReuseIdentifier: TripCell.tripCellIdentifier)
+        collectionView.register(TransportCell.self, forCellWithReuseIdentifier: TransportCell.tripCellIdentifier)
         collectionView.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.categoryCellIdentifier)
         
-        collectionView.register(SliderCell.self, forCellWithReuseIdentifier: "hang")
+        collectionView.register(SliderCell.self, forCellWithReuseIdentifier: SliderCell.sliderCellIdentifier)
     
         collectionView.collectionViewLayout = collectionViewCreator.createCompositionalLayout()// need to create compositional first
         
