@@ -66,9 +66,9 @@ class CategoryCell : UICollectionViewCell {
         self.frame = CGRect(x: 0 , y: 0, width: 200, height: 200)
         self.bounds = CGRect(x: 0 , y: 0, width: 200, height: 200)
         
-    }
+    } 
     
-    func configure(category : DataSessionModel?) {
+    func configure(category : DataSectionModel?) {
         if let ca = category {
             categoryImage.load(urlString: ca.image)
             categoryName.text = ca.title.vi

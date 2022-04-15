@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B92218E027FD72870038A605 /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218DF27FD72870038A605 /* SessionModel.swift */; };
-		B92218E227FD77C00038A605 /* DataSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218E127FD77C00038A605 /* DataSessionModel.swift */; };
+		B92218E027FD72870038A605 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218DF27FD72870038A605 /* SectionModel.swift */; };
+		B92218E227FD77C00038A605 /* DataSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218E127FD77C00038A605 /* DataSectionModel.swift */; };
 		B92218E427FD8A670038A605 /* NativeBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218E327FD8A670038A605 /* NativeBannerCell.swift */; };
 		B998EECD27FE83F50069624C /* TripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EECC27FE83F50069624C /* TripCell.swift */; };
 		B998EED027FFF33E0069624C /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EECF27FFF33E0069624C /* CategoryCell.swift */; };
@@ -29,8 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B92218DF27FD72870038A605 /* SessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionModel.swift; sourceTree = "<group>"; };
-		B92218E127FD77C00038A605 /* DataSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSessionModel.swift; sourceTree = "<group>"; };
+		B92218DF27FD72870038A605 /* SectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionModel.swift; sourceTree = "<group>"; };
+		B92218E127FD77C00038A605 /* DataSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSectionModel.swift; sourceTree = "<group>"; };
 		B92218E327FD8A670038A605 /* NativeBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeBannerCell.swift; sourceTree = "<group>"; };
 		B998EECC27FE83F50069624C /* TripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 		B998EECF27FFF33E0069624C /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
@@ -110,7 +110,6 @@
 		B9E9DAF427FAF17400CEDC71 /* beclone */ = {
 			isa = PBXGroup;
 			children = (
-				B998EED5280588940069624C /* Creators */,
 				B9E9DB0F27FAF4FB00CEDC71 /* Controller */,
 				B9E9DB0E27FAF4F100CEDC71 /* View */,
 				B9E9DB0D27FAF4D600CEDC71 /* Model */,
@@ -130,8 +129,8 @@
 			children = (
 				B9E9DB1027FAF51000CEDC71 /* HomeScreenManager.swift */,
 				B9E9DB1227FAF51F00CEDC71 /* HomeScreenManagerDelegate.swift */,
-				B92218DF27FD72870038A605 /* SessionModel.swift */,
-				B92218E127FD77C00038A605 /* DataSessionModel.swift */,
+				B92218DF27FD72870038A605 /* SectionModel.swift */,
+				B92218E127FD77C00038A605 /* DataSectionModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -139,6 +138,7 @@
 		B9E9DB0E27FAF4F100CEDC71 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B998EED5280588940069624C /* Creators */,
 				B998EECE27FFD8BF0069624C /* Custom Cell */,
 				B9E9DAFB27FAF17400CEDC71 /* Main.storyboard */,
 			);
@@ -227,13 +227,13 @@
 			files = (
 				B9E9DAFA27FAF17400CEDC71 /* ViewController.swift in Sources */,
 				B9E9DB1327FAF51F00CEDC71 /* HomeScreenManagerDelegate.swift in Sources */,
-				B92218E027FD72870038A605 /* SessionModel.swift in Sources */,
+				B92218E027FD72870038A605 /* SectionModel.swift in Sources */,
 				B998EED7280588AA0069624C /* HomeScreenCollectionViewCreator.swift in Sources */,
 				B9E9DAF627FAF17400CEDC71 /* AppDelegate.swift in Sources */,
 				B92218E427FD8A670038A605 /* NativeBannerCell.swift in Sources */,
 				B998EECD27FE83F50069624C /* TripCell.swift in Sources */,
 				B998EEDA28058BE00069624C /* HomeSectionController.swift in Sources */,
-				B92218E227FD77C00038A605 /* DataSessionModel.swift in Sources */,
+				B92218E227FD77C00038A605 /* DataSectionModel.swift in Sources */,
 				B9E9DB1127FAF51000CEDC71 /* HomeScreenManager.swift in Sources */,
 				B9E9DB0C27FAF28B00CEDC71 /* Constants.swift in Sources */,
 				B9E9DAF827FAF17400CEDC71 /* SceneDelegate.swift in Sources */,

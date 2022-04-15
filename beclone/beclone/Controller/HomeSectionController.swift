@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 
 class HomeSectionController {
-    var sessionsData : [SessionModel] = []
+    var sectionsData : [SectionModel] = []
     
-    init(sessionData : [SessionModel]) {
-        self.sessionsData = sessionData
+    init(sectionsData : [SectionModel]) {
+        self.sectionsData = sectionsData
     }
     func test() {
-        print(sessionsData[0].name)
+        print(sectionsData[0].name)
     }
     func setupHomeScreenSections(section : Int) -> Int {
         switch section {
@@ -24,8 +24,8 @@ class HomeSectionController {
             case 1:
                 return 1
             case 2:
-                if sessionsData.count > 0 {
-                    if let count = sessionsData[3].data?.count {
+                if sectionsData.count > 0 {
+                    if let count = sectionsData[3].data?.count {
                         return count > 10 ? 10 : count
                     }
                     else {
@@ -45,8 +45,8 @@ class HomeSectionController {
         
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NativeBannerCell.nativeBannerIdentifier, for: indexPath) as! NativeBannerCell
-            if sessionsData.count > 0 {
-                if let nativeBannerImageUrl = sessionsData[0].metaData?["image"] {
+            if sectionsData.count > 0 {
+                if let nativeBannerImageUrl = sectionsData[0].metaData?["image"] {
                     cell.setImage(imageUrl: nativeBannerImageUrl as! String)
                 }
             }
@@ -57,7 +57,7 @@ class HomeSectionController {
         }
         else if  indexPath.section == 2 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.categoryCellIdentifier, for: indexPath) as! CategoryCell
-            let services : [DataSessionModel]? = sessionsData[3].data
+            let services : [DataSectionModel]? = sectionsData[3].data
             if let s = services {
                 cell.configure(category: s[indexPath.row])
             }

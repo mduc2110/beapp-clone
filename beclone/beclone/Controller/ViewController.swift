@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     
     private let cellIdentifier : String = String(describing: UICollectionViewCell.self)
     
-    var sectionsData : [SessionModel] = []
+    var sectionsData : [SectionModel] = []
     
     lazy var viewFrame = self.view.frame
     
@@ -39,15 +39,11 @@ class ViewController: UIViewController {
 
         homeScreenManager.getHomeData()
         
-        initHomeScreenView()
+        initRootView()
         
         timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
     }
 
-    func initHomeScreenView() {
-        initRootView()
-    }
-    
     func initRootView() {
         let rootView = creator.getView()
         
@@ -148,23 +144,18 @@ extension ViewController : HomeScreenManagerDelegate {
         DispatchQueue.main.async { [weak self] in
             let imageUrlString = urlBackground
             let imageUrl:URL = URL(string: imageUrlString)!
-            
             let imageData:NSData = NSData(contentsOf: imageUrl)!
             
             self?.view.backgroundColor = UIColor(patternImage: UIImage(data: imageData as Data)!)
         }
-        
     }
     
-    func didGetSectionsList(sectionsData: [SessionModel]) {
+    func didGetSectionsList(sectionsData: [SectionModel]) {
         self.sectionsData = sectionsData
-        self.homeSectionController = HomeSectionController(sessionData: sectionsData)
+        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.homeScreenCollectionView?.reloadData()
-            
-            
         }
-        
     }
 }
 

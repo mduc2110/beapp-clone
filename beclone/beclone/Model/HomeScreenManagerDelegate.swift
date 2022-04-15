@@ -9,5 +9,5 @@ import Foundation
 
 protocol HomeScreenManagerDelegate {
     func didSetBackgroundForHomeScreen(urlBackground : String)
-    func didGetSectionsList(sectionsData : [SessionModel])
+    func didGetSectionsList(sectionsData : [SectionModel])
 }

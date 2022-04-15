@@ -75,7 +75,7 @@ struct HomeScreenManager {
 ////                   let title = item["title"],
 //                   let hash = item["hash"] as? String {
 //
-////                    let data = data.map({ item -> DataSessionModel? in
+////                    let data = data.map({ item -> DataSectionModel? in
 //////                        if let id = item {
 ////                            print(item)
 //////                        }
@@ -104,8 +104,8 @@ struct HomeScreenManager {
             setBackground(urlBackground: backgroundImage)
         }
     }
-    func convertRawDataToModel(dataArray : [[String : Any]]) -> [SessionModel?] {
-        let sessionsModel = dataArray.map ({ (item) -> SessionModel? in
+    func convertRawDataToModel(dataArray : [[String : Any]]) -> [SectionModel?] {
+        let sectionsModel = dataArray.map ({ (item) -> SectionModel? in
             if let id = item["id"] as? Int,
                 let name = item["name"] as? String,
                 let order = item["order"] as? Int,
@@ -116,7 +116,7 @@ struct HomeScreenManager {
                 
                 
             
-                let dataSession : [DataSessionModel?] = data.map({ (itemData) -> DataSessionModel? in
+                let dataSession : [DataSectionModel?] = data.map({ (itemData) -> DataSectionModel? in
                     if
                         let type = itemData["@type"] as? String,
                         let id = itemData["id"] as? Int,
@@ -150,13 +150,13 @@ struct HomeScreenManager {
                             decodedLabel = nil
                         }
                        
-                        return DataSessionModel(type: type, id: id, name: name, order: order, title: decodedTitle, url: url, image: image, is_new: is_new, is_enabled_label: is_enabled_label, label: decodedLabel, is_enabled: is_enabled, title_key: title_key, promoted: promoted, need_updated: need_updated)
+                        return DataSectionModel(type: type, id: id, name: name, order: order, title: decodedTitle, url: url, image: image, is_new: is_new, is_enabled_label: is_enabled_label, label: decodedLabel, is_enabled: is_enabled, title_key: title_key, promoted: promoted, need_updated: need_updated)
                     }else {
                         return nil
                     }
                     
                 })
-                let unwrappedData : [DataSessionModel]?
+                let unwrappedData : [DataSectionModel]?
                 
                 if dataSession.count > 0 {
                     unwrappedData = dataSession.map { $0! }
@@ -164,13 +164,13 @@ struct HomeScreenManager {
                     unwrappedData = nil
                 }
                 
-                return SessionModel(id: id, name: name, order: order, type: type, data: unwrappedData,  metaData: metaData,  hash: hash)
+                return SectionModel(id: id, name: name, order: order, type: type, data: unwrappedData,  metaData: metaData,  hash: hash)
             }
             else {
                 return nil
             }
         })
-        return sessionsModel
+        return sectionsModel
     }
     
     func setBackground(urlBackground : String) {
@@ -178,7 +178,7 @@ struct HomeScreenManager {
         self.delegate?.didSetBackgroundForHomeScreen(urlBackground: urlBackground)
     }
     
-    func setSessionData(sessionsData : [SessionModel?]) {
+    func setSessionData(sessionsData : [SectionModel?]) {
         let safeSessionData = sessionsData.compactMap { $0 }
         self.delegate?.didGetSectionsList(sectionsData: safeSessionData)
     }

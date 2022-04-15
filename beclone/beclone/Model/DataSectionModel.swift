@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct DataSessionModel {
+struct DataSectionModel {
     let type: String
     let id: Int
     let name: String

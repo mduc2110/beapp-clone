@@ -8,12 +8,12 @@
 import Foundation
 
 
-struct SessionModel {
+struct SectionModel {
     let id: Int
     let name: String
     let order: Int
     let type: String
-    let data: [DataSessionModel]?
+    let data: [DataSectionModel]?
     let metaData: [String : Any]?
     let hash: String
 }
