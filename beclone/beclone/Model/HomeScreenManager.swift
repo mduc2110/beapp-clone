@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct HomeScreenManager {
     
@@ -29,9 +30,7 @@ struct HomeScreenManager {
             "access_token": K.accessToken
         ]
         
-        let encodedBody = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
-        
-        guard let encodedBody = encodedBody else {return}
+        guard let encodedBody = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted) else { return }
         
         // create post request
         let url = URL(string: K.apiURL)!
@@ -58,10 +57,17 @@ struct HomeScreenManager {
         
     }
     
-    func parseJSON(with data : Data) {
+    func demo() throws -> Int {
+        if true {
+            return 1
+        } else {
+            throw NSError()
+        }
+    }
+    
+    private func parseJSON(with data : Data) {
         
-        let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-        if let responseJSON = responseJSON as? [String: Any],
+        if let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let array = responseJSON["sessions"] as? [[String: Any]],
            let backgroundImage = responseJSON["background_image"] as? String
         {
@@ -94,80 +100,9 @@ struct HomeScreenManager {
 //
 //            })
 
-            let sessionsModel = convertRawDataToModel(dataArray: array)
-            
-            setSessionData(sessionsData: sessionsModel)
-            
+            setSessionData(sessionsData: array.toSections())
             setBackground(urlBackground: backgroundImage)
         }
-    }
-    func convertRawDataToModel(dataArray : [[String : Any]]) -> [SectionModel?] {
-        let sectionsModel = dataArray.map ({ (item) -> SectionModel? in
-            if let id = item["id"] as? Int,
-                let name = item["name"] as? String,
-                let order = item["order"] as? Int,
-                let type = item["type"] as? String,
-                let data = item["data"] as? [[String : Any]],
-                let metaData = item["meta_data"] as? [String: Any],
-                let hash = item["hash"] as? String {
-                
-                
-            
-                let dataSession : [DataSectionModel?] = data.map({ (itemData) -> DataSectionModel? in
-                    if
-                        let type = itemData["@type"] as? String,
-                        let id = itemData["id"] as? Int,
-                        let name = itemData["name"] as? String,
-                        let order = itemData["order"] as? Int,
-                        let title = itemData["title"] as? [String : Any],
-                        let url = itemData["url"] as? String,
-                        let image = itemData["image"] as? String,
-                        let is_new = itemData["is_new"] as? Int,
-                        let is_enabled_label = itemData["is_enabled_label"] as? Int,
-                        let label = itemData["label"] as? [String : Any]?,
-                        let is_enabled = itemData["is_enabled"] as? Bool,
-                        let title_key = itemData["title_key"] as? String,
-                        let promoted = itemData["promoted"] as? Int,
-                        let need_updated = itemData["need_updated"] as? Bool {
-                        
-                        
-                        guard let vi = title["vi"] as? String else { return nil }
-                        guard let en = title["en"] as? String else { return nil }
-                        
-                        let decodedTitle : Title = Title(en: en, vi: vi)
-                        
-                        var decodedLabel : Label?
-                        
-                        if  let label = label,
-                            let vi = label["vi"] as? String,
-                            let en = label["en"] as? String {
-                            decodedLabel = Label(en: en, vi: vi)
-
-                        } else {
-                            decodedLabel = nil
-                        }
-                       
-                        return DataSectionModel(type: type, id: id, name: name, order: order, title: decodedTitle, url: url, image: image, is_new: is_new, is_enabled_label: is_enabled_label, label: decodedLabel, is_enabled: is_enabled, title_key: title_key, promoted: promoted, need_updated: need_updated)
-                    }else {
-                        return nil
-                    }
-                    
-                })
-                let unwrappedData : [DataSectionModel]?
-                
-                if dataSession.count > 0 {
-                    unwrappedData = dataSession.map { $0! }
-                }else {
-                    unwrappedData = nil
-                }
-                
-                return SectionModel(id: id, name: name, order: order, type: type, data: unwrappedData,  metaData: metaData,  hash: hash)
-            }
-            else {
-                return nil
-            }
-        })
-        return sectionsModel
     }
     
     func setBackground(urlBackground : String) {
@@ -180,3 +115,138 @@ struct HomeScreenManager {
         self.delegate?.didGetSectionsList(sectionsData: safeSessionData)
     }
 }
+
+fileprivate extension Dictionary where Key == String, Value == Any {
+    func toDataSectionModel() -> DataSectionModel? {
+        guard
+            let type = self["@type"] as? String,
+            let id = self["id"] as? Int,
+            let name = self["name"] as? String,
+            let order = self["order"] as? Int,
+            let title = self["title"] as? [String : Any],
+            let url = self["url"] as? String,
+            let image = self["image"] as? String,
+            let is_new = self["is_new"] as? Int,
+            let is_enabled_label = self["is_enabled_label"] as? Int,
+            let label = self["label"] as? [String : Any]?,
+            let is_enabled = self["is_enabled"] as? Bool,
+            let title_key = self["title_key"] as? String,
+            let promoted = self["promoted"] as? Int,
+            let need_updated = self["need_updated"] as? Bool,
+            let vi = title["vi"] as? String,
+            let en = title["en"] as? String
+        else {
+            return nil
+        }
+        
+        let decodedTitle: Title = Title(en: en, vi: vi)
+        var decodedLabel: Label?
+        
+        if  let label = label,
+            let vi = label["vi"] as? String,
+            let en = label["en"] as? String {
+            decodedLabel = Label(en: en, vi: vi)
+        } else {
+            decodedLabel = nil
+        }
+        
+        return DataSectionModel(
+            type: type,
+            id: id,
+            name: name,
+            order: order,
+            title: decodedTitle,
+            url: url,
+            image: image,
+            is_new: is_new,
+            is_enabled_label: is_enabled_label,
+            label: decodedLabel,
+            is_enabled: is_enabled,
+            title_key: title_key,
+            promoted: promoted,
+            need_updated: need_updated
+        )
+    }
+}
+
+fileprivate extension Array where Element == Dictionary<String, Any> {
+    func toSections() -> [SectionModel?] {
+        let sectionsModel = map { (item) -> SectionModel? in //compact map
+            guard let id = item["id"] as? Int,
+                  let name = item["name"] as? String,
+                  let order = item["order"] as? Int,
+                  let type = item["type"] as? String,
+                  let data = item["data"] as? [[String : Any]],
+                  let metaData = item["meta_data"] as? [String: Any],
+                  let hash = item["hash"] as? String
+            else { return nil }
+            
+            let dataSession : [DataSectionModel?] = data.map(HomeMapper.toDataSectionModel)//data.map { $0.toDataSectionModel() }
+            
+            let unwrappedData : [DataSectionModel]?
+            
+            if dataSession.count > 0 {
+                unwrappedData = dataSession.map { $0! }
+            } else {
+                unwrappedData = nil
+            }
+            
+            return SectionModel(id: id, name: name, order: order, type: type, data: unwrappedData,  metaData: metaData,  hash: hash)
+        }
+        return sectionsModel
+    }
+}
+
+fileprivate struct HomeMapper {
+    static func toDataSectionModel(data: [String: Any]) -> DataSectionModel? {
+        guard
+            let type = data["@type"] as? String,
+            let id = data["id"] as? Int,
+            let name = data["name"] as? String,
+            let order = data["order"] as? Int,
+            let title = data["title"] as? [String : Any],
+            let url = data["url"] as? String,
+            let image = data["image"] as? String,
+            let is_new = data["is_new"] as? Int,
+            let is_enabled_label = data["is_enabled_label"] as? Int,
+            let label = data["label"] as? [String : Any]?,
+            let is_enabled = data["is_enabled"] as? Bool,
+            let title_key = data["title_key"] as? String,
+            let promoted = data["promoted"] as? Int,
+            let need_updated = data["need_updated"] as? Bool,
+            let vi = title["vi"] as? String,
+            let en = title["en"] as? String
+        else {
+            return nil
+        }
+        
+        let decodedTitle: Title = Title(en: en, vi: vi)
+        var decodedLabel: Label?
+        
+        if  let label = label,
+            let vi = label["vi"] as? String,
+            let en = label["en"] as? String {
+            decodedLabel = Label(en: en, vi: vi)
+        } else {
+            decodedLabel = nil
+        }
+        
+        return DataSectionModel(
+            type: type,
+            id: id,
+            name: name,
+            order: order,
+            title: decodedTitle,
+            url: url,
+            image: image,
+            is_new: is_new,
+            is_enabled_label: is_enabled_label,
+            label: decodedLabel,
+            is_enabled: is_enabled,
+            title_key: title_key,
+            promoted: promoted,
+            need_updated: need_updated
+        )
+    }
+}
+

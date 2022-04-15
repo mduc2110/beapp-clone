@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class UIHomeScreenCreator {
-    let parentController : ViewController?
+    weak var parentController : ViewController?
     
     let parentFrame : CGRect
     
@@ -286,3 +286,17 @@ class UIHomeScreenCreator {
         topBackgroundConstraints?.constant = defaultGradientBackgroundHeight! - contentOffset
     }
 }
+
+//class NavibarView: UIView {
+//
+//        func setBeDarkColor() {
+//            self.textColor = UIColor.darkColor
+//
+//        }
+//
+//        func setBeLightColor() {
+//            self.textColor = .white
+//        }
+//
+//
+//}

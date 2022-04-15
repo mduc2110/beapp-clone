@@ -7,12 +7,44 @@
 
 import UIKit
 
+protocol CollectionCellController {
+    func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
+    func display()
+    func endDisplay()
+}
+
+class NativeBannerCellController: CollectionCellController {
+    let imageUrl: String
+    private var cell: NativeBannerCell?
+    
+    init(imageUrl: String) {
+        self.imageUrl = imageUrl
+    }
+    
+    func display() {
+        cell?.setImage(imageUrl: imageUrl)
+    }
+    
+    func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: NativeBannerCell.nativeBannerIdentifier, for: indexPath)
+        cell = myCell as? NativeBannerCell
+        return myCell
+    }
+    
+    func endDisplay() {
+        cell = nil
+    }
+}
+
+struct CollectionSectionController {
+    var cellControllers: [CollectionCellController]
+}
 
 class ViewController: UIViewController {
     
     private let cellIdentifier : String = String(describing: UICollectionViewCell.self)
     
-    var sectionsData : [SectionModel] = []
+    var sectionsData : [CollectionSectionController] = []
     
     lazy var viewFrame = self.view.frame
     
@@ -25,8 +57,6 @@ class ViewController: UIViewController {
     var homeScreenCollectionViewCreator = HomeScreenCollectionViewCreator()
     
     var homeSectionController : HomeSectionController?
-    
-    var cellLayout = UICollectionViewLayout()
 
     var timer : Timer?
     
@@ -100,18 +130,33 @@ class ViewController: UIViewController {
 
 extension ViewController : UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        return sectionsData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return homeSectionController?.setupHomeScreenSections(section: section) ?? 1
+        return sectionsData[section].cellControllers.count
+//        return homeSectionController?.setupHomeScreenSections(section: section) ?? 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let initCell = collectionView.dequeueReusableCell(withReuseIdentifier: K.initialCellIdentifier, for: indexPath)
-        let cell = homeSectionController?.setupHomeScreenCell(collectionView, cellForItemAt: indexPath)
+//        let initCell = collectionView.dequeueReusableCell(withReuseIdentifier: K.initialCellIdentifier, for: indexPath)
+//        let cell = homeSectionController?.setupHomeScreenCell(collectionView, cellForItemAt: indexPath)
+//
+//        return cell ?? initCell
         
-        return cell ?? initCell
+        return cellController(at: indexPath).cell(for: collectionView, indexPath: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cellController(at: indexPath).display()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cellController(at: indexPath).endDisplay()
+    }
+    
+    private func cellController(at indexPath: IndexPath) -> CollectionCellController {
+        return sectionsData[indexPath.section].cellControllers[indexPath.item]
     }
 //    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 //        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: secondIdentifier, for: indexPath)
@@ -151,7 +196,22 @@ extension ViewController : HomeScreenManagerDelegate {
     }
     
     func didGetSectionsList(sectionsData: [SectionModel]) {
-        self.sectionsData = sectionsData
+        self.sectionsData = sectionsData.map {
+            switch $0.type {
+            case "native_banner":
+                let imageUrl = $0.metaData?["image_url"] as? String
+                let cellController = NativeBannerCellController(imageUrl: imageUrl ?? "")
+                return CollectionSectionController(cellControllers: [cellController])
+                
+            case "trip":
+                let cellController = TransportCellController(imageUrl: imageUrl ?? "")
+                return CollectionSectionController(cellControllers: [cellController])
+                
+            default:
+                return CollectionSectionController(cellControllers: [])
+            }
+            
+        }
         self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.homeScreenCollectionView?.reloadData()
