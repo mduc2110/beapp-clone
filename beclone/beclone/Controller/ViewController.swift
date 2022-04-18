@@ -7,34 +7,7 @@
 
 import UIKit
 
-protocol CollectionCellController {
-    func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
-    func display()
-    func endDisplay()
-}
 
-class NativeBannerCellController: CollectionCellController {
-    let imageUrl: String
-    private var cell: NativeBannerCell?
-    
-    init(imageUrl: String) {
-        self.imageUrl = imageUrl
-    }
-    
-    func display() {
-        cell?.setImage(imageUrl: imageUrl)
-    }
-    
-    func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
-        let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: NativeBannerCell.nativeBannerIdentifier, for: indexPath)
-        cell = myCell as? NativeBannerCell
-        return myCell
-    }
-    
-    func endDisplay() {
-        cell = nil
-    }
-}
 
 struct CollectionSectionController {
     var cellControllers: [CollectionCellController]
@@ -46,17 +19,19 @@ class ViewController: UIViewController {
     
     var sectionsData : [CollectionSectionController] = []
     
+//    var sectionsData : [SectionModel] = []
+    
     lazy var viewFrame = self.view.frame
     
     lazy var creator = UIHomeScreenCreator(parentController: self, parentFrame: self.viewFrame)
+    
+    var homeScreenCollectionViewCreator = HomeScreenCollectionViewCreator()
     
     var homeScreenCollectionView : UICollectionView?
     
     var homeScreenManager = HomeScreenManager()
     
-    var homeScreenCollectionViewCreator = HomeScreenCollectionViewCreator()
-    
-    var homeSectionController : HomeSectionController?
+//    var homeSectionController : HomeSectionController?
 
     var timer : Timer?
     
@@ -71,7 +46,7 @@ class ViewController: UIViewController {
         
         initRootView()
         
-        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
+//        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
     }
 
     func initRootView() {
@@ -96,14 +71,12 @@ class ViewController: UIViewController {
     }
     
     func setHeightForGradientBackground() {
-        guard let section = homeSectionController?.getIndexPathSection(sectionName: .Services) else { return }
-        
         guard let collectionView = homeScreenCollectionView,
-              let cell = collectionView.cellForItem(at: IndexPath(item: 1, section: section))
+              let cell = collectionView.cellForItem(at: IndexPath(item: 1, section: 2))
         else { return }
         
         let targetFrame = collectionView.convert(cell.frame, to: view)
-        creator.getSectionHeight(targetFrame)
+        creator.setSectionHeight(targetFrame)
     }
     
     func rootViewConstraints(_ rootView : UIView) {
@@ -117,14 +90,14 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    @objc func slideToNext() {
-        
-        let section = homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
-        
-        currentCellIndex = (currentCellIndex + 1) % 3
-        
-        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
-    }
+//    @objc func slideToNext() {
+//        
+//        let section = homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
+//        
+//        currentCellIndex = (currentCellIndex + 1) % 3
+//        
+//        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
+//    }
     
 }
 
@@ -135,7 +108,6 @@ extension ViewController : UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sectionsData[section].cellControllers.count
-//        return homeSectionController?.setupHomeScreenSections(section: section) ?? 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -143,7 +115,6 @@ extension ViewController : UICollectionViewDataSource {
 //        let cell = homeSectionController?.setupHomeScreenCell(collectionView, cellForItemAt: indexPath)
 //
 //        return cell ?? initCell
-        
         return cellController(at: indexPath).cell(for: collectionView, indexPath: indexPath)
     }
     
@@ -158,10 +129,6 @@ extension ViewController : UICollectionViewDataSource {
     private func cellController(at indexPath: IndexPath) -> CollectionCellController {
         return sectionsData[indexPath.section].cellControllers[indexPath.item]
     }
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: secondIdentifier, for: indexPath)
-//        return header
-//    }
 
 }
 
@@ -196,23 +163,42 @@ extension ViewController : HomeScreenManagerDelegate {
     }
     
     func didGetSectionsList(sectionsData: [SectionModel]) {
+        
         self.sectionsData = sectionsData.map {
             switch $0.type {
-            case "native_banner":
-                let imageUrl = $0.metaData?["image_url"] as? String
+            case .nativeBanner:
+                let imageUrl = $0.metaData?["image"] as? String
                 let cellController = NativeBannerCellController(imageUrl: imageUrl ?? "")
                 return CollectionSectionController(cellControllers: [cellController])
-                
-            case "trip":
-                let cellController = TransportCellController(imageUrl: imageUrl ?? "")
+
+            case .trip:
+                let cellController = TransportCellController()
                 return CollectionSectionController(cellControllers: [cellController])
+            case .grid:
+                var cellControllers : [ServicesCellController] = []
+                if let safeData = $0.data {
+//                    cellControllers = safeData.map { (item) in
+//                        return ServicesCellController(services: item)
+//                    }
+
+                    for (index, item) in safeData.enumerated() {
+                        if index == 10 { break }
+                        cellControllers.append(ServicesCellController(services: item))
+                        
+                    }
+                    
+                }
+                
+                return CollectionSectionController(cellControllers: cellControllers)
+            case .banner:
+                let cellController = BannerController()
+                return CollectionSectionController(cellControllers: [cellController, cellController])
                 
             default:
                 return CollectionSectionController(cellControllers: [])
             }
-            
         }
-        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
+//        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.homeScreenCollectionView?.reloadData()
         }

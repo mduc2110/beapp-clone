@@ -270,7 +270,7 @@ class UIHomeScreenCreator {
         }
     }
     
-    func getSectionHeight(_ sectionPosition : CGRect?) {
+    func setSectionHeight(_ sectionPosition : CGRect?) {
         
         if let safeHeight = sectionPosition?.origin.y {
             //add inset

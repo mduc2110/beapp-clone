@@ -181,6 +181,10 @@ fileprivate extension Array where Element == Dictionary<String, Any> {
                   let hash = item["hash"] as? String
             else { return nil }
             
+            if type != "native_banner", type != "trip", type != "grid", type != "banner" {
+                return nil
+            }
+            
             let dataSession : [DataSectionModel?] = data.map(HomeMapper.toDataSectionModel)//data.map { $0.toDataSectionModel() }
             
             let unwrappedData : [DataSectionModel]?
@@ -191,7 +195,7 @@ fileprivate extension Array where Element == Dictionary<String, Any> {
                 unwrappedData = nil
             }
             
-            return SectionModel(id: id, name: name, order: order, type: type, data: unwrappedData,  metaData: metaData,  hash: hash)
+            return SectionModel(id: id, name: name, order: order, type: Type(rawValue: type) ?? Type.none, data: unwrappedData,  metaData: metaData,  hash: hash)
         }
         return sectionsModel
     }
