@@ -60,7 +60,7 @@ class CategoryCell : UICollectionViewCell {
         super.init(frame: frame)
         
         self.layer.cornerRadius = 6
-        self.backgroundColor = .white
+//        self.backgroundColor = .white
         
         self.frame = CGRect(x: 0 , y: 0, width: 200, height: 200)
         self.bounds = CGRect(x: 0 , y: 0, width: 200, height: 200)

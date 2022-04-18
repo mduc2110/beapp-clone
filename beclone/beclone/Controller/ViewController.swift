@@ -58,7 +58,7 @@ class ViewController: UIViewController {
         homeScreenCollectionView?.isPagingEnabled = true
         
         view.addSubview(rootView)
-        
+
         rootViewConstraints(rootView)
         
     }
@@ -91,11 +91,11 @@ class ViewController: UIViewController {
     }
     
 //    @objc func slideToNext() {
-//        
+//
 //        let section = homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
-//        
+//
 //        currentCellIndex = (currentCellIndex + 1) % 3
-//        
+//
 //        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
 //    }
     
