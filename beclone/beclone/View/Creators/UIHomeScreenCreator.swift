@@ -80,13 +80,23 @@ class UIHomeScreenCreator {
     
     func initHomeNavigation() {
         
-        homeNavigation.initHomeNavigationView(with: uiRootView)
+//        homeNavigation.initHomeNavigationView(with: uiRootView)
         
-        let homeNavigationView = homeNavigation.getHomeNavigationView()
+//        let homeNavigationView = homeNavigation.getHomeNavigationView()
+        
         
         uiRootView.addSubview(uiGradientBackground)
+        
+        uiRootView.addSubview(homeNavigation)
+        
+        NSLayoutConstraint.activate([
+            homeNavigation.topAnchor.constraint(equalTo: uiRootView.topAnchor),
+            homeNavigation.leftAnchor.constraint(equalTo: uiRootView.leftAnchor),
+            homeNavigation.rightAnchor.constraint(equalTo: uiRootView.rightAnchor),
+//            homeNavigation.heightAnchor.constraint(equalToConstant: 100)
+        ])
 
-        initCollectionHomeScreen(homeNavigationView: homeNavigationView)
+        initCollectionHomeScreen()
     }
     
     func addBackgroundConstraints(_ top : CGFloat) {
@@ -101,14 +111,14 @@ class UIHomeScreenCreator {
         NSLayoutConstraint.activate(constraints)
     }
     
-    func initCollectionHomeScreen(homeNavigationView : UIView) {
+    func initCollectionHomeScreen() {
         //add collection view to root view
         uiRootView.addSubview(homeScreenCollectionView)
         //add collection view constraints
 
         homeScreenCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
-        homeScreenCollectionView.topAnchor.constraint(equalTo: homeNavigationView.bottomAnchor).isActive = true
+        homeScreenCollectionView.topAnchor.constraint(equalTo: homeNavigation.bottomAnchor).isActive = true
         homeScreenCollectionView.leftAnchor.constraint(equalTo: uiRootView.safeAreaLayoutGuide.leftAnchor).isActive = true
         homeScreenCollectionView.rightAnchor.constraint(equalTo: uiRootView.safeAreaLayoutGuide.rightAnchor).isActive = true
         homeScreenCollectionView.bottomAnchor.constraint(equalTo: uiRootView.bottomAnchor).isActive = true
@@ -120,7 +130,7 @@ class UIHomeScreenCreator {
     }
 
     func getTopScreenInnerHeight() -> CGFloat {
-        return homeNavigation.getNavigationInnerHeight()
+        return homeNavigation.bounds.height
     }
     
     func animateTopScreen() {

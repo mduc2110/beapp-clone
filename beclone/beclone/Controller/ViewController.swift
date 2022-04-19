@@ -39,14 +39,16 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        homeScreenManager.delegate = self
-
-        homeScreenManager.getHomeData()
-        
         initRootView()
         
-//        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
+        homeScreenManager.delegate = self
+        homeScreenManager.getHomeData()
+        
+        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
+//        let controller = UIViewController()
+//        view.addSubview(controller.view)
+//        didMove(toParent: <#T##UIViewController?#>)
+        
     }
 
     func initRootView() {
@@ -90,14 +92,14 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-//    @objc func slideToNext() {
-//
-//        let section = homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
-//
-//        currentCellIndex = (currentCellIndex + 1) % 3
-//
-//        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
-//    }
+    @objc func slideToNext() {
+
+        let section = 3//homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
+
+        currentCellIndex = (currentCellIndex + 1) % 3
+        print("😂 \(currentCellIndex)")
+        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
+    }
     
 }
 
@@ -138,14 +140,15 @@ extension ViewController : UICollectionViewDelegate{
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        homeScreenCollectionView?.cellForItem(at: <#T##IndexPath#>)
-        if scrollView == homeScreenCollectionView {
-            let contentOffset = scrollView.contentOffset.y
-            creator.updateGradientBackgroundHeight(contentOffset)
-            if(contentOffset >= view.safeAreaInsets.top + creator.getTopScreenInnerHeight()) {
-                creator.animateTopScreen()
-            } else {
-                creator.clearAnimateTopScreen()
-            }
+        
+        guard scrollView == homeScreenCollectionView else { return }
+        
+        let contentOffset = scrollView.contentOffset.y
+        creator.updateGradientBackgroundHeight(contentOffset)
+        if(contentOffset >= view.safeAreaInsets.top + creator.getTopScreenInnerHeight()) {
+            creator.animateTopScreen()
+        } else {
+            creator.clearAnimateTopScreen()
         }
     }
 }

@@ -10,8 +10,6 @@ import UIKit
 
 class BannerController : CollectionCellController {
     private var cell : SliderCell?
-    private var indexPath : IndexPath?
-    private var collectionView : UICollectionView?
     
     var timer : Timer?
     
@@ -20,12 +18,9 @@ class BannerController : CollectionCellController {
     func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: SliderCell.sliderCellIdentifier, for: indexPath)
         cell = myCell as? SliderCell
-        self.indexPath = indexPath
-        self.collectionView = collectionView
         return myCell
     }
     func display() {
-        print(currentCellIndex)
 //        let pageControl = UIPageControl()
 //        pageControl.numberOfPages = 5
 //        pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -44,16 +39,16 @@ class BannerController : CollectionCellController {
         
     }
     
-    @objc func slideToNext() {
-
-        let section = indexPath?.section
-
-        currentCellIndex = (currentCellIndex + 1) % 3
+//    @objc func slideToNext() {
 //
-//        print(currentCellIndex)
-
-        collectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section!), at: .centeredHorizontally, animated: true)
-    }
+//        let section = indexPath?.section
+//
+//        currentCellIndex = (currentCellIndex + 1) % 3
+////
+////        print(currentCellIndex)
+//
+//        collectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section!), at: .centeredHorizontally, animated: true)
+//    }
     
     func endDisplay() {
         cell = nil
