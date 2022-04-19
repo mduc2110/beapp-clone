@@ -31,6 +31,17 @@ class ViewController: UIViewController {
     
     var homeScreenManager = HomeScreenManager()
     
+//    var collectionView = HomeCollectionView()
+    
+    lazy var collectionView : UICollectionView = {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        let cv = HomeCollectionView(frame: view.frame, collectionViewLayout: layout)
+        
+        return cv
+    }()
+    
+    var homeNavigation = HomeNavigation()
+    
 //    var homeSectionController : HomeSectionController?
 
     var timer : Timer?
@@ -54,15 +65,37 @@ class ViewController: UIViewController {
     func initRootView() {
         let rootView = creator.getView()
         
-        homeScreenCollectionView = creator.getCollectionView()
-        homeScreenCollectionView?.dataSource = self
-        homeScreenCollectionView?.delegate = self
-        homeScreenCollectionView?.isPagingEnabled = true
+//        homeScreenCollectionView = creator.getCollectionView()
+//        homeScreenCollectionView?.dataSource = self
+//        homeScreenCollectionView?.delegate = self
+//        homeScreenCollectionView?.isPagingEnabled = true
+//
+//        view.addSubview(rootView)
+//        rootViewConstraints(rootView)
         
-        view.addSubview(rootView)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.isPagingEnabled = true
 
-        rootViewConstraints(rootView)
-        
+        view.addSubview(homeNavigation)
+
+        view.addSubview(collectionView)
+
+        addConstraints()
+    }
+    
+    func addConstraints() {
+        NSLayoutConstraint.activate([
+            homeNavigation.topAnchor.constraint(equalTo: view.topAnchor),
+            homeNavigation.leftAnchor.constraint(equalTo: view.leftAnchor),
+            homeNavigation.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: homeNavigation.bottomAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     override func viewDidLayoutSubviews() {
@@ -94,7 +127,7 @@ class ViewController: UIViewController {
     
     @objc func slideToNext() {
 
-        let section = 3//homeSectionController?.getIndexPathSection(sectionName: .Slider) ?? 3
+        let section = 3
 
         currentCellIndex = (currentCellIndex + 1) % 3
         print("😂 \(currentCellIndex)")
@@ -203,7 +236,9 @@ extension ViewController : HomeScreenManagerDelegate {
         }
 //        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
-            self?.homeScreenCollectionView?.reloadData()
+            self?.collectionView.reloadData()
+            
+//            self?.homeScreenCollectionView?.reloadData()
         }
     }
 }
