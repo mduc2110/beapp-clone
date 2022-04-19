@@ -72,7 +72,7 @@ class ViewController: UIViewController {
     
     func setHeightForGradientBackground() {
         guard let collectionView = homeScreenCollectionView,
-              let cell = collectionView.cellForItem(at: IndexPath(item: 1, section: 2))
+              let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2))
         else { return }
         
         let targetFrame = collectionView.convert(cell.frame, to: view)
@@ -192,7 +192,7 @@ extension ViewController : HomeScreenManagerDelegate {
                 return CollectionSectionController(cellControllers: cellControllers)
             case .banner:
                 let cellController = BannerController()
-                return CollectionSectionController(cellControllers: [cellController, cellController])
+                return CollectionSectionController(cellControllers: [cellController, cellController, cellController])
                 
             default:
                 return CollectionSectionController(cellControllers: [])

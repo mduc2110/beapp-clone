@@ -98,12 +98,12 @@
 			path = Creators;
 			sourceTree = "<group>";
 		};
-		B998EEDB280673F20069624C /* UI */ = {
+		B998EEDB280673F20069624C /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				B998EEEF280D45380069624C /* HomeNavigation.swift */,
 			);
-			name = UI;
+			name = Components;
 			path = Creators;
 			sourceTree = "<group>";
 		};
@@ -166,7 +166,7 @@
 		B9E9DB0E27FAF4F100CEDC71 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B998EEDB280673F20069624C /* UI */,
+				B998EEDB280673F20069624C /* Components */,
 				B998EED5280588940069624C /* Creators */,
 				B998EECE27FFD8BF0069624C /* Custom Cell */,
 				B9E9DAFB27FAF17400CEDC71 /* Main.storyboard */,
