@@ -25,7 +25,7 @@ class HomeCollectionView : UICollectionView {
         
         register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.categoryCellIdentifier)
         
-        register(SliderCell.self, forCellWithReuseIdentifier: SliderCell.sliderCellIdentifier)
+        register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.bannerCellIdentifier)
     
         translatesAutoresizingMaskIntoConstraints = false
         

@@ -64,7 +64,7 @@ class HomeSectionController {
             return cell
         }
         else if indexPath.section == 3 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SliderCell.sliderCellIdentifier, for: indexPath) as! SliderCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCell.bannerCellIdentifier, for: indexPath) as! BannerCell
             return cell
         }
         else {

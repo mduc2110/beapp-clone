@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     
     lazy var viewFrame = self.view.frame
     
-    lazy var creator = UIHomeScreenCreator(parentController: self, parentFrame: self.viewFrame)
+//    lazy var creator = UIHomeScreenCreator(parentController: self, parentFrame: self.viewFrame)
     
     var homeScreenCollectionViewCreator = HomeScreenCollectionViewCreator()
     
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
         homeScreenManager.delegate = self
         homeScreenManager.getHomeData()
         
-        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
+//        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
 //        let controller = UIViewController()
 //        view.addSubview(controller.view)
 //        didMove(toParent: <#T##UIViewController?#>)
@@ -78,10 +78,10 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.isPagingEnabled = true
-
-        view.addSubview(uiGradientBackground)
-        
+ 
         view.addSubview(homeNavigation)
+        
+        view.addSubview(uiGradientBackground)
 
         view.addSubview(collectionView)
 
@@ -105,27 +105,23 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 //        homeScreenCollectionView.frame = view.bounds
-        
+
         setHeightForGradientBackground()
     }
     
     func setHeightForGradientBackground() {
-//        guard let collectionView = homeScreenCollectionView,
-//              let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2))
-//        else { return }
-//
+        guard topBackgroundConstraints == nil else { return } //topBackground is only set one time
+        
         guard let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2))
         else { return }
         
         let targetFrame = collectionView.convert(cell.frame, to: view)
-//        creator.setSectionHeight(targetFrame)
-        
         setSectionHeight(targetFrame)
     }
     
     func addBackgroundConstraints(_ top : CGFloat) {
         topBackgroundConstraints = uiGradientBackground.topAnchor.constraint(equalTo: view.topAnchor, constant: top)
-        
+
         let constraints = [
             topBackgroundConstraints!,
             uiGradientBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -136,7 +132,7 @@ class ViewController: UIViewController {
     }
     
     func setSectionHeight(_ sectionPosition : CGRect?) {
-        
+//        print(sectionPosition)
         if let safeHeight = sectionPosition?.origin.y {
             //add inset
             let safeHeightInset = safeHeight - 16
@@ -148,19 +144,20 @@ class ViewController: UIViewController {
     }
     
     func updateGradientBackgroundHeight(_ contentOffset : CGFloat) {
+        
         topBackgroundConstraints?.constant = defaultGradientBackgroundHeight! - contentOffset
+        uiGradientBackground.layoutIfNeeded()
+
     }
     
-    
-    
-
     @objc func slideToNext() {
-
+        
         let section = 3
-
+        
         currentCellIndex = (currentCellIndex + 1) % 3
         print("😂 \(currentCellIndex)")
-        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
+        collectionView.scrollToItem(at: IndexPath(item: 1, section: section), at: .centeredHorizontally, animated: true)
+//        homeScreenCollectionView?.scrollToItem(at: IndexPath(item: currentCellIndex, section: section), at: .centeredHorizontally, animated: true)
     }
     
 }
@@ -201,16 +198,17 @@ extension ViewController : UICollectionViewDelegate{
        print("User tapped on item \(indexPath.row)")
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        homeScreenCollectionView?.cellForItem(at: <#T##IndexPath#>)
-        
-        guard scrollView == homeScreenCollectionView else { return }
+        guard scrollView == collectionView else { return }
         
         let contentOffset = scrollView.contentOffset.y
-        creator.updateGradientBackgroundHeight(contentOffset)
-        if(contentOffset >= view.safeAreaInsets.top + creator.getTopScreenInnerHeight()) {
-            creator.animateTopScreen()
+        updateGradientBackgroundHeight(contentOffset)
+
+//        print(view.safeAreaInsets.top)
+        if(contentOffset >= homeNavigation.bounds.height) {
+            
+            homeNavigation.toggleBackground(flag: true)
         } else {
-            creator.clearAnimateTopScreen()
+            homeNavigation.toggleBackground(flag: false)
         }
     }
 }
@@ -245,19 +243,25 @@ extension ViewController : HomeScreenManagerDelegate {
 //                    cellControllers = safeData.map { (item) in
 //                        return ServicesCellController(services: item)
 //                    }
-
                     for (index, item) in safeData.enumerated() {
                         if index == 10 { break }
                         cellControllers.append(ServicesCellController(services: item))
-                        
                     }
                     
                 }
                 
                 return CollectionSectionController(cellControllers: cellControllers)
             case .banner:
-                let cellController = BannerController()
-                return CollectionSectionController(cellControllers: [cellController, cellController, cellController])
+                let imageBannerList = [
+                    "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png",
+                    "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png",
+                    "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png"
+                ]
+                
+                let cellController = BannerController(imageList: imageBannerList)
+                return CollectionSectionController(cellControllers: [cellController,
+//                 cellController, cellController])
+                ])
                 
             default:
                 return CollectionSectionController(cellControllers: [])
@@ -266,7 +270,6 @@ extension ViewController : HomeScreenManagerDelegate {
 //        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
-            
 //            self?.homeScreenCollectionView?.reloadData()
         }
     }
