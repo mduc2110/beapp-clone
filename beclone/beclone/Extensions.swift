@@ -57,20 +57,3 @@ extension UIView {
     }
     
 }
-
-protocol UITextColor {
-    func setBeDarkColor()
-    func setBeLightColor()
-}
-
-extension UILabel : UITextColor {
-    func setBeDarkColor() {
-        self.textColor = UIColor(red: 8/255, green: 31/255, blue: 66/255, alpha: 1)
-    }
-    
-    func setBeLightColor() {
-        self.textColor = .white
-    }
-    
-    
-}

@@ -22,7 +22,7 @@ class BannerVCCellController : CollectionCellController {
         guard let safeBannerCell = bannerCell else { return }
         let img = UIImageView(frame: CGRect(x: 0, y: 0, width: safeBannerCell.frame.width, height: safeBannerCell.frame.height))
         img.load(urlString: urlString)
-        
+        img.contentMode = .scaleAspectFill
         safeBannerCell.addSubview(img)
     }
     

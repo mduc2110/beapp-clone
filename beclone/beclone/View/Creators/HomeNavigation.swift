@@ -132,17 +132,28 @@ class HomeNavigation : UIView {
     }
     
     func toggleBackground(flag : Bool) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
             if flag {
-                self.backgroundColor = .white
-                self.welcomeLabel.setBeDarkColor()
-                self.bePointAmount.setBeDarkColor()
+                self?.backgroundColor = .white
+                self?.setDarkColor()
             }
             else {
-                self.backgroundColor = .clear
-                self.welcomeLabel.setBeLightColor()
-                self.bePointAmount.setBeLightColor()
+                self?.backgroundColor = .clear
+                self?.setLightColor()
             }
         }
+    }
+    
+    private func setDarkColor() {
+        let darkColor = UIColor(red: 8/255, green: 31/255, blue: 66/255, alpha: 1)
+        self.welcomeLabel.textColor = darkColor
+        self.bePointAmount.textColor = darkColor
+        
+    }
+    
+    private func setLightColor() {
+        let lightColor = UIColor.white
+        self.welcomeLabel.textColor = lightColor
+        self.bePointAmount.textColor = lightColor
     }
 }
