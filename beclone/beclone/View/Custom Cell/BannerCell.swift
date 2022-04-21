@@ -82,7 +82,7 @@ class BannerCell : UICollectionViewCell {
         
     }
     
-    func configAutolayout() {
+    private func configAutolayout() {
         NSLayoutConstraint.activate([
             bannerCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             bannerCollectionView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

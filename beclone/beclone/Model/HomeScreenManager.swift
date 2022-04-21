@@ -57,13 +57,13 @@ struct HomeScreenManager {
         
     }
     
-    func demo() throws -> Int {
-        if true {
-            return 1
-        } else {
-            throw NSError()
-        }
-    }
+//    func demo() throws -> Int {
+//        if true {
+//            return 1
+//        } else {
+//            throw NSError()
+//        }
+//    }
     
     private func parseJSON(with data : Data) {
         

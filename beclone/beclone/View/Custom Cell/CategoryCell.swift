@@ -86,13 +86,13 @@ class CategoryCell : UICollectionViewCell {
 
     }
     
-    func setPromoteCellStyle() {
+    private func setPromoteCellStyle() {
         self.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1)
         self.layer.cornerRadius = 6
         self.categoryName.font = UIFont.boldSystemFont(ofSize: 14)
     }
     
-    func initView(promoted : Int, isNew : Int) {
+    private func initView(promoted : Int, isNew : Int) {
         contentView.addSubview(categoryImage)
         contentView.addSubview(categoryName)
         
@@ -110,7 +110,7 @@ class CategoryCell : UICollectionViewCell {
         }
     }
     
-    func configImageConstraints(isPromoted : Int) {
+    private func configImageConstraints(isPromoted : Int) {
         NSLayoutConstraint.deactivate(categoryImage.constraints)
         let constraints = [
             categoryImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -131,7 +131,7 @@ class CategoryCell : UICollectionViewCell {
         }
     }
     
-    func configNameConstraints(isPromoted : Int) {
+    private func configNameConstraints(isPromoted : Int) {
         NSLayoutConstraint.deactivate(categoryName.constraints)
         
         let nameConstraints = [
@@ -150,7 +150,7 @@ class CategoryCell : UICollectionViewCell {
         }
     }
 
-    func configNewLabelConstraints() {
+    private func configNewLabelConstraints() {
         let constraints = [
                 topLabel.topAnchor.constraint(equalTo: categoryImage.topAnchor, constant: -7),
                 topLabel.centerXAnchor.constraint(equalTo: categoryImage.centerXAnchor, constant: (topLabel.frame.width + 20) / 2),
@@ -163,7 +163,7 @@ class CategoryCell : UICollectionViewCell {
     
     
     
-    func setLabel(txt : String) {
+    private func setLabel(txt : String) {
         self.uiLabel.text = txt
     }
     

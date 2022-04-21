@@ -130,7 +130,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         initView()
     }
     
-    func initView() {
+    private func initView() {
         currentAddressView.addSubview(currentAddressIcon)
         currentAddressView.addSubview(currentAddressTextField)
         currentAddressView.addSubview(bottomLine)
@@ -150,7 +150,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         
     }
     
-    func configUiView() {
+    private func configUiView() {
         configCurrentAddressView()
         
         configDestinationAddressView()
@@ -158,7 +158,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         configAddButtonField()
     }
     
-    func configCurrentAddressView() {
+    private func configCurrentAddressView() {
         let currentAddressViewConstraints = [
             currentAddressView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             currentAddressView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -176,7 +176,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         setBottomLineContraints()
     }
     
-    func configDestinationAddressView() {
+    private func configDestinationAddressView() {
         let currentAddressViewConstraints = [
             destinationAddressView.topAnchor.constraint(equalTo: currentAddressView.bottomAnchor, constant: 8),
             destinationAddressView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -189,7 +189,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         setIconConstraint(with: destinationAddressIcon, to: destinationAddressView, width: 14.55, height: 20)
     }
     
-    func configAddButtonField() {
+    private func configAddButtonField() {
         let addButtonViewConstraints = [
             addButtonView.topAnchor.constraint(equalTo: destinationAddressView.bottomAnchor, constant: 8),
             addButtonView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
@@ -202,7 +202,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         setAddressCollectionViewConstraints()
     }
     
-    func setTextFieldConstraint(with childElement : UIView, to parentView : UIView) {
+    private func setTextFieldConstraint(with childElement : UIView, to parentView : UIView) {
         let textFieldConstraints = [
             childElement.rightAnchor.constraint(equalTo: parentView.rightAnchor, constant: -16),
             childElement.leftAnchor.constraint(equalTo: parentView.leftAnchor, constant: 52),
@@ -212,7 +212,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         NSLayoutConstraint.activate(textFieldConstraints)
     }
     
-    func setBottomLineContraints() {
+    private func setBottomLineContraints() {
         NSLayoutConstraint.activate([
             bottomLine.widthAnchor.constraint(equalTo: currentAddressTextField.widthAnchor),
             bottomLine.heightAnchor.constraint(equalToConstant: 1),
@@ -221,7 +221,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         ])
     }
     
-    func setIconConstraint(with iconElement : UIView, to parentView : UIView, width : CGFloat, height : CGFloat) {
+    private func setIconConstraint(with iconElement : UIView, to parentView : UIView, width : CGFloat, height : CGFloat) {
         let currentAddressIconConstraints = [
             iconElement.leftAnchor.constraint(equalTo: parentView.leftAnchor, constant: 17),
             iconElement.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
@@ -231,7 +231,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         NSLayoutConstraint.activate(currentAddressIconConstraints)
     }
     
-    func setAddressCollectionViewConstraints() {
+    private func setAddressCollectionViewConstraints() {
         let addressCollectionViewConstraints = [
             addressListCollectionView.centerXAnchor.constraint(equalTo: addButtonView.centerXAnchor),
             addressListCollectionView.centerYAnchor.constraint(equalTo: addButtonView.centerYAnchor),
