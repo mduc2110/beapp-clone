@@ -10,6 +10,7 @@
 		B92218E027FD72870038A605 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218DF27FD72870038A605 /* SectionModel.swift */; };
 		B92218E227FD77C00038A605 /* DataSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218E127FD77C00038A605 /* DataSectionModel.swift */; };
 		B92218E427FD8A670038A605 /* NativeBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92218E327FD8A670038A605 /* NativeBannerCell.swift */; };
+		B953ED2028114A6000B3925C /* FrameLayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = B953ED1F28114A6000B3925C /* FrameLayoutKit */; };
 		B9747392280EB72100EE5361 /* HomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9747391280EB72100EE5361 /* HomeCollectionView.swift */; };
 		B9747396281012C600EE5361 /* BannerVCCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9747395281012C600EE5361 /* BannerVCCellController.swift */; };
 		B998EECD27FE83F50069624C /* TransportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B998EECC27FE83F50069624C /* TransportCell.swift */; };
@@ -75,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B953ED2028114A6000B3925C /* FrameLayoutKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +208,9 @@
 			dependencies = (
 			);
 			name = beclone;
+			packageProductDependencies = (
+				B953ED1F28114A6000B3925C /* FrameLayoutKit */,
+			);
 			productName = beclone;
 			productReference = B9E9DAF227FAF17400CEDC71 /* beclone.app */;
 			productType = "com.apple.product-type.application";
@@ -234,6 +239,9 @@
 				Base,
 			);
 			mainGroup = B9E9DAE927FAF17400CEDC71;
+			packageReferences = (
+				B953ED1E28114A6000B3925C /* XCRemoteSwiftPackageReference "FrameLayoutKit" */,
+			);
 			productRefGroup = B9E9DAF327FAF17400CEDC71 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -505,6 +513,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B953ED1E28114A6000B3925C /* XCRemoteSwiftPackageReference "FrameLayoutKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kennic/FrameLayoutKit.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B953ED1F28114A6000B3925C /* FrameLayoutKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B953ED1E28114A6000B3925C /* XCRemoteSwiftPackageReference "FrameLayoutKit" */;
+			productName = FrameLayoutKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B9E9DAEA27FAF17400CEDC71 /* Project object */;
 }
