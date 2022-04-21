@@ -28,36 +28,20 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         collectionView.alwaysBounceHorizontal = true
         collectionView.register(LocationCell.self, forCellWithReuseIdentifier: addressCellIdentifier)
         collectionView.collectionViewLayout.invalidateLayout()
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
+
         return collectionView
     }()
-    
-    //UI Parent View
-    private lazy var currentAddressView : UIView = {
-        let currentAddressView = UIView()
-        currentAddressView.translatesAutoresizingMaskIntoConstraints = false
-//        currentAddressView.layer.borderColor = CGColor(red: 1, green: 0, blue: 0, alpha: 1)
-//        currentAddressView.layer.borderWidth = 1.0
-        return currentAddressView
-    }()
-    
-    private lazy var destinationAddressView : UIView = {
-        let destinationAddressView = UIView()
-        destinationAddressView.translatesAutoresizingMaskIntoConstraints = false
-        return destinationAddressView
-    }()
+
     private lazy var addButtonView : UIView = {
         let addButtonView = UIView()
-        addButtonView.translatesAutoresizingMaskIntoConstraints = false
         return addButtonView
     }()
     
     private lazy var bottomLine : UIView = {
         let bottomLine = UIView()
         bottomLine.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1)
-        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+
+        bottomLine.frame = CGRect(x: 0, y: 0, width: contentView.bounds.width - 12.84 - 12.63 - 24, height: 1)
         return bottomLine
     }()
     
@@ -72,37 +56,33 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
     }()
     
     //UI Icon image
-    private lazy var currentAddressIcon : UIImageView = {
+    private lazy var fromAddressIcon : UIImageView = {
         let uiImage = UIImageView()
         
         uiImage.image = UIImage(named: "Transport")
         
-        uiImage.translatesAutoresizingMaskIntoConstraints = false
         return uiImage
     }()
     
-    private lazy var destinationAddressIcon : UIImageView = {
+    private lazy var toAddressIcon : UIImageView = {
         let uiImage = UIImageView()
         uiImage.image = UIImage(named: "Union")
-        uiImage.translatesAutoresizingMaskIntoConstraints = false
         return uiImage
     }()
     //UI Text Field
     private lazy var currentAddressTextField : UITextField = {
-        let currentAddressTextField = UITextField()
-        currentAddressTextField.addBorder(toSide: .Bottom, withColor: CGColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1), andThickness: 0.2)
-        currentAddressTextField.text = "146 Nguyễn Đình Chiều, Phường Võ Thị Sáu Quận 3"
-        currentAddressTextField.textColor = .black
-        currentAddressTextField.font = UIFont.boldSystemFont(ofSize: 14)
-        currentAddressTextField.setBottomBorder(color: UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1))
-        currentAddressTextField.translatesAutoresizingMaskIntoConstraints = false
-        currentAddressTextField.becomeFirstResponder()
-        return currentAddressTextField
+        let textField = UITextField()
+        textField.addBorder(toSide: .Bottom, withColor: CGColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1), andThickness: 0.2)
+        textField.text = "146 Nguyễn Đình Chiều, Phường Võ Thị Sáu Quận 3"
+        textField.textColor = .black
+        textField.font = UIFont.boldSystemFont(ofSize: 14)
+        textField.setBottomBorder(color: UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1))
+        textField.becomeFirstResponder()
+        return textField
     }()
-    private lazy var destinationAddressTextField : UITextField = {
+    private lazy var toAddressTextField : UITextField = {
         let textField = UITextField()
         textField.placeholder = "Nhập điểm đến"
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.tintColor = UIColor(red: 144/255, green: 154/255, blue: 170/255, alpha: 1)
         return textField
     }()
@@ -116,6 +96,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         "Nhà người yêu 3"
     ]
     
+    private let frameLayouts = VStackLayout()
     
     override init(frame : CGRect) {
         super.init(frame: frame)
@@ -126,125 +107,43 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         addressListCollectionView.delegate = self
         
         
+        contentView.addSubview(fromAddressIcon)
+        contentView.addSubview(currentAddressTextField)
         
-        initView()
+        contentView.addSubview(bottomLine)
+        
+        contentView.addSubview(toAddressIcon)
+        contentView.addSubview(toAddressTextField)
+        
+        contentView.addSubview(addressListCollectionView)
+        
+        frameLayouts.with {
+            $0 + HStackLayout {
+                $0 + fromAddressIcon
+                $0 + 12.63
+                $0 + currentAddressTextField
+                $0.padding(top: 13, left: 5, bottom: 13, right: 4)
+            }
+            ($0 + bottomLine).alignment = (.top, .right)
+            ($0 + bottomLine).padding(top: 0, left: 24 + 12, bottom: 0, right: 0)
+            $0 + HStackLayout {
+                $0 + toAddressIcon
+                $0 + 16.45
+                $0 + toAddressTextField
+                $0.padding(top: 12, left: 9, bottom: 12, right: 4)
+            }
+            $0 + addressListCollectionView
+        }
+        frameLayouts.padding(top: 12, left: 12, bottom: 12, right: 12)
+        
+        contentView.addSubview(frameLayouts)
     }
-    
-    private func initView() {
-        currentAddressView.addSubview(currentAddressIcon)
-        currentAddressView.addSubview(currentAddressTextField)
-        currentAddressView.addSubview(bottomLine)
-        contentView.addSubview(currentAddressView)
-        
-        
-        destinationAddressView.addSubview(destinationAddressIcon)
-        destinationAddressView.addSubview(destinationAddressTextField)
-        
-        contentView.addSubview(destinationAddressView)
-        
-        
-        addButtonView.addSubview(addressListCollectionView)
-        contentView.addSubview(addButtonView)
-        
-        configUiView()
-        
-    }
-    
-    private func configUiView() {
-        configCurrentAddressView()
-        
-        configDestinationAddressView()
-        
-        configAddButtonField()
-    }
-    
-    private func configCurrentAddressView() {
-        let currentAddressViewConstraints = [
-            currentAddressView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            currentAddressView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            currentAddressView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            currentAddressView.heightAnchor.constraint(equalToConstant: 43)
-//            currentAddressView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 105)
-//            contentView.bottomAnchor.constraint(equalTo: currentAddressView.bottomAnchor, constant: 105),
-//            contentView.rightAnchor.constraint(equalTo: currentAddressView.rightAnchor, constant: 40)
-        ]
-        
-        NSLayoutConstraint.activate(currentAddressViewConstraints)
-        
-        setTextFieldConstraint(with: currentAddressTextField, to: currentAddressView)
-        setIconConstraint(with: currentAddressIcon, to: currentAddressView, width: 22.37, height: 17.16)
-        setBottomLineContraints()
-    }
-    
-    private func configDestinationAddressView() {
-        let currentAddressViewConstraints = [
-            destinationAddressView.topAnchor.constraint(equalTo: currentAddressView.bottomAnchor, constant: 8),
-            destinationAddressView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            destinationAddressView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            destinationAddressView.heightAnchor.constraint(equalToConstant: 44)     //important
-        ]
-        NSLayoutConstraint.activate(currentAddressViewConstraints)
-
-        setTextFieldConstraint(with: destinationAddressTextField, to: destinationAddressView)
-        setIconConstraint(with: destinationAddressIcon, to: destinationAddressView, width: 14.55, height: 20)
-    }
-    
-    private func configAddButtonField() {
-        let addButtonViewConstraints = [
-            addButtonView.topAnchor.constraint(equalTo: destinationAddressView.bottomAnchor, constant: 8),
-            addButtonView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
-            addButtonView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
-            addButtonView.heightAnchor.constraint(equalToConstant: 32)
-//            contentView.bottomAnchor.constraint(equalTo: destinationAddressView.bottomAnchor, constant: 52)
-        ]
-        NSLayoutConstraint.activate(addButtonViewConstraints)
-        
-        setAddressCollectionViewConstraints()
-    }
-    
-    private func setTextFieldConstraint(with childElement : UIView, to parentView : UIView) {
-        let textFieldConstraints = [
-            childElement.rightAnchor.constraint(equalTo: parentView.rightAnchor, constant: -16),
-            childElement.leftAnchor.constraint(equalTo: parentView.leftAnchor, constant: 52),
-            childElement.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
-            childElement.heightAnchor.constraint(equalTo: parentView.widthAnchor)
-        ]
-        NSLayoutConstraint.activate(textFieldConstraints)
-    }
-    
-    private func setBottomLineContraints() {
-        NSLayoutConstraint.activate([
-            bottomLine.widthAnchor.constraint(equalTo: currentAddressTextField.widthAnchor),
-            bottomLine.heightAnchor.constraint(equalToConstant: 1),
-            bottomLine.bottomAnchor.constraint(equalTo: currentAddressView.bottomAnchor),
-            bottomLine.rightAnchor.constraint(equalTo: currentAddressTextField.rightAnchor)
-        ])
-    }
-    
-    private func setIconConstraint(with iconElement : UIView, to parentView : UIView, width : CGFloat, height : CGFloat) {
-        let currentAddressIconConstraints = [
-            iconElement.leftAnchor.constraint(equalTo: parentView.leftAnchor, constant: 17),
-            iconElement.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
-            iconElement.widthAnchor.constraint(equalToConstant: width * 1.2),
-            iconElement.heightAnchor.constraint(equalToConstant: height * 1.2)
-        ]
-        NSLayoutConstraint.activate(currentAddressIconConstraints)
-    }
-    
-    private func setAddressCollectionViewConstraints() {
-        let addressCollectionViewConstraints = [
-            addressListCollectionView.centerXAnchor.constraint(equalTo: addButtonView.centerXAnchor),
-            addressListCollectionView.centerYAnchor.constraint(equalTo: addButtonView.centerYAnchor),
-            addressListCollectionView.heightAnchor.constraint(equalTo: addButtonView.heightAnchor),
-            addressListCollectionView.widthAnchor.constraint(equalTo: addButtonView.widthAnchor)
-        ]
-        NSLayoutConstraint.activate(addressCollectionViewConstraints)
-    }
-
-
     override func layoutSubviews() {
         super.layoutSubviews()
-//        currentAddressTextField.frame = bounds
+        
+        let size = frameLayouts.sizeThatFits(contentView.bounds.size)
+        frameLayouts.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -266,21 +165,6 @@ extension TransportCell : UICollectionViewDataSource {
 }
 
 extension TransportCell : UICollectionViewDelegateFlowLayout {
-//    public func collectionView(_ collectionView: UICollectionView,
-//                                   layout collectionViewLayout: UICollectionViewLayout,
-//                                   minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//            return 10
-//        }
-//
-//        public func collectionView(_ collectionView: UICollectionView,
-//                                   layout collectionViewLayout: UICollectionViewLayout,
-//                                   minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//            return 10
-//        }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
-//    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cell = LocationCell()
 
