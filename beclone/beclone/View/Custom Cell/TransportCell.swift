@@ -77,7 +77,7 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
         textField.textColor = .black
         textField.font = UIFont.boldSystemFont(ofSize: 14)
         textField.setBottomBorder(color: UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1))
-        textField.becomeFirstResponder()
+//        textField.becomeFirstResponder()
         return textField
     }()
     private lazy var toAddressTextField : UITextField = {

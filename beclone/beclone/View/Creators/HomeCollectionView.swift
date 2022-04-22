@@ -27,7 +27,7 @@ class HomeCollectionView : UICollectionView {
         
         register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.bannerCellIdentifier)
     
-        translatesAutoresizingMaskIntoConstraints = false
+//        translatesAutoresizingMaskIntoConstraints = false
         
         collectionViewLayout = collectionViewCreator.createCompositionalLayout()// need to create compositional first
         
