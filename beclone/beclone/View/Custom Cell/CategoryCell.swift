@@ -7,14 +7,13 @@
 
 import Foundation
 import UIKit
+import FrameLayoutKit
 
 
 class CategoryCell : UICollectionViewCell {
     static let categoryCellIdentifier = "categoryCellIdentifier"
     
     static let decorationKind = "background"
-    
-    private let uiLabel = UILabel()
     
     private lazy var categoryName : UILabel = {
         let name = UILabel()
@@ -23,22 +22,20 @@ class CategoryCell : UICollectionViewCell {
         return name
     }()
     
+    private var imagePoint : CGPoint?
+    
+    private var promoteCell : Int?
+    
+    private var labelName : String?
+    
     private lazy var topLabel : UILabel = {
        let newLabel = UILabel()
         newLabel.text = "New"
-        newLabel.font = UIFont.systemFont(ofSize: 12)
+        newLabel.font = UIFont.systemFont(ofSize: 8)
         newLabel.backgroundColor = UIColor(red: 241/255, green: 71/255, blue: 71/255, alpha: 1)
         newLabel.textColor = .white
         
-//        let labelSize = newLabel.sizeThatFits(contentView.bounds.size)
-//        newLabel.frame = CGRect(x: 0, y: 0, width: labelSize.width + 200, height: newLabel.frame.size.height)
-        
-        let maxSize = CGSize(width: 300, height: newLabel.frame.size.height + 10)
-        let size = newLabel.sizeThatFits(maxSize)
-        newLabel.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
-        
         newLabel.textAlignment = .center
-        newLabel.layer.cornerRadius = (newLabel.frame.size.height + 3) / 2
         newLabel.layer.borderWidth = 2
         newLabel.layer.masksToBounds = true
         newLabel.layer.borderColor = CGColor(red: 1, green: 1, blue: 1, alpha: 1)
@@ -48,42 +45,30 @@ class CategoryCell : UICollectionViewCell {
     
     private lazy var categoryImage : UIImageView = {
         let imgView = UIImageView()
-//        imgView.load(urlString: "https://imgcdn.be.com.vn/be-config/services/ic-home-challenges%403x.png")
-
-//        imgView.bounds.size = CGSize(width: self.frame.size.width - 20, height: self.frame.size.width - 20)
-//        imgView.layer.masksToBounds = true //overflow : hidden
-//        imgView.layer.cornerRadius = (imgView.frame.size.width * 0.84) / 2
+        imgView.contentMode = .scaleAspectFit
         return imgView
     }()
+    
+    let frameLayouts = VStackLayout()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         self.layer.cornerRadius = 6
 //        self.backgroundColor = .white
-        
-        self.frame = CGRect(x: 0 , y: 0, width: 200, height: 200)
-        self.bounds = CGRect(x: 0 , y: 0, width: 200, height: 200)
     }
     
     func configure(category : DataSectionModel?) {
         if let ca = category {
             categoryImage.load(urlString: ca.image)
             categoryName.text = ca.title.vi
-            
-            if ca.promoted == 1 {
-                setPromoteCellStyle()
-            }
-            
-            var newLabel = 0
-            if let safeLabel = ca.label {
-                newLabel = 1
-                self.topLabel.text = safeLabel.vi
-            }
-            
-            initView(promoted: ca.promoted, isNew: newLabel)
-        }
 
+            promoteCell = ca.promoted
+            
+            labelName = ca.label?.vi
+
+            initView(promoted: ca.promoted)
+        }
     }
     
     private func setPromoteCellStyle() {
@@ -92,79 +77,65 @@ class CategoryCell : UICollectionViewCell {
         self.categoryName.font = UIFont.boldSystemFont(ofSize: 14)
     }
     
-    private func initView(promoted : Int, isNew : Int) {
+    private func initView(promoted : Int) {
+        
         contentView.addSubview(categoryImage)
         contentView.addSubview(categoryName)
+        contentView.addSubview(topLabel)
         
-        categoryName.translatesAutoresizingMaskIntoConstraints = false
-        categoryImage.translatesAutoresizingMaskIntoConstraints = false
-
-        configImageConstraints(isPromoted: promoted)
-        configNameConstraints(isPromoted: promoted)
-
+        frameLayouts.removeAll()
         
-        if isNew == 1 {
-            contentView.addSubview(topLabel)
-            topLabel.translatesAutoresizingMaskIntoConstraints = false
-            configNewLabelConstraints()
+        frameLayouts.with {
+
+            if promoted == 1 {
+                $0 + HStackLayout {
+                    ($0 + categoryImage).with {
+                        $0.fixedSize = CGSize(width: 40, height: 40)
+                        $0.alignment.horizontal = .center
+                    }
+                    $0.spacing(8)
+                    ($0 + categoryName)
+                        .with {
+                            $0.alignment.horizontal = .center
+                        }
+                    $0.flexible()
+                }
+                frameLayouts.padding(top: 0, left: 12, bottom: 0, right: 12)
+            }
+            else {
+                ($0 + categoryImage).with {
+                    $0.fixedSize = CGSize(width: 40, height: 40)
+                    $0.alignment.horizontal = .center
+                }
+                $0.spacing(8)
+                ($0 + categoryName)
+                    .with {
+                    $0.alignment.horizontal = .center
+                }
+//                $0.debug = true
+            }
+        }
+        contentView.addSubview(frameLayouts)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        frameLayouts.frame = CGRect(x: 0, y: 0, width: contentView.bounds.width, height: contentView.bounds.height)
+        
+        configLabelName()
+        if let safePromoteValue = promoteCell,
+           safePromoteValue == 1 {
+            setPromoteCellStyle()
         }
     }
     
-    private func configImageConstraints(isPromoted : Int) {
-        NSLayoutConstraint.deactivate(categoryImage.constraints)
-        let constraints = [
-            categoryImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            categoryImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            categoryImage.heightAnchor.constraint(equalToConstant: 40),
-            categoryImage.widthAnchor.constraint(equalToConstant: 40),
-        ]
-        let promoteConstraints = [
-            categoryImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
-            categoryImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            categoryImage.heightAnchor.constraint(equalToConstant: 40),
-            categoryImage.widthAnchor.constraint(equalToConstant: 40),
-        ]
-        if isPromoted == 1 {
-            NSLayoutConstraint.activate(promoteConstraints)
-        } else {
-            NSLayoutConstraint.activate(constraints)
-        }
-    }
-    
-    private func configNameConstraints(isPromoted : Int) {
-        NSLayoutConstraint.deactivate(categoryName.constraints)
+    func configLabelName() {
+        guard let safeLabelName = labelName else { return }
+        let parentFrame = topLabel.sizeThatFits(contentView.bounds.size)
+        topLabel.frame = CGRect(x: contentView.bounds.width / 2, y: -parentFrame.height / 2, width: parentFrame.width + 12, height: parentFrame.height + 4)
+        topLabel.layer.cornerRadius = topLabel.frame.height / 2
+        topLabel.text = safeLabelName
         
-        let nameConstraints = [
-            categoryName.topAnchor.constraint(equalTo: categoryImage.bottomAnchor, constant: 11),
-            categoryName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-        ]
-    
-        let promoteNameConstraints = [
-            categoryName.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            categoryName.leftAnchor.constraint(equalTo: categoryImage.rightAnchor, constant: 12)
-        ]
-        if isPromoted == 1 {
-            NSLayoutConstraint.activate(promoteNameConstraints)
-        } else {
-            NSLayoutConstraint.activate(nameConstraints)
-        }
-    }
-
-    private func configNewLabelConstraints() {
-        let constraints = [
-                topLabel.topAnchor.constraint(equalTo: categoryImage.topAnchor, constant: -7),
-                topLabel.centerXAnchor.constraint(equalTo: categoryImage.centerXAnchor, constant: (topLabel.frame.width + 20) / 2),
-                topLabel.widthAnchor.constraint(equalToConstant: topLabel.frame.width + 20),
-                topLabel.heightAnchor.constraint(equalToConstant: topLabel.frame.height + 2)
-            ]
-        topLabel.clearConstraints(constraints: constraints)
-        NSLayoutConstraint.activate(constraints)
-    }
-    
-    
-    
-    private func setLabel(txt : String) {
-        self.uiLabel.text = txt
     }
     
     required init?(coder: NSCoder) {
