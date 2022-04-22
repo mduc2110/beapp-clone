@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import FrameLayoutKit
 
 class HomeNavigation : UIView {
 
-    lazy var welcomeLabel : UILabel = {
+    private lazy var welcomeLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Chào Vũ Mạnh Đức!"
@@ -18,20 +19,23 @@ class HomeNavigation : UIView {
         return label
     }()
     
-    lazy var bePointButton : UIButton = {
+    private lazy var bePointButton : UIButton = {
        let uiButton = UIButton()
         uiButton.translatesAutoresizingMaskIntoConstraints = false
         uiButton.backgroundColor = UIColor(red: 94/255, green: 109/255, blue: 132/255, alpha: 0.5)
-        let viewSize = UIScreen.main.bounds.size
-        let buttonSize = uiButton.sizeThatFits(viewSize)
-        uiButton.contentHorizontalAlignment = .center
-        uiButton.frame = CGRect(x: 0, y: 0, width: buttonSize.width + 30, height: buttonSize.height)
-        
-        uiButton.layer.cornerRadius = buttonSize.height / 2
+//        let viewSize = UIScreen.main.bounds.size
+//        let buttonSize = uiButton.sizeThatFits(viewSize)
+//        uiButton.contentHorizontalAlignment = .center
+//        uiButton.frame = CGRect(x: 0, y: 0, width: buttonSize.width + 30, height: buttonSize.height)
+//
+//        uiButton.imageView?.image = UIImage(named: "Icon-Color-bePoint")
+//        uiButton.titleLabel?.text = "100.000"
+//        uiButton.contentEdgeInset
+//        uiTap
         return uiButton
     }()
     
-    lazy var bePointAmount : UILabel = {
+    private lazy var bePointAmount : UILabel = {
         let uiLabel = UILabel()
         uiLabel.translatesAutoresizingMaskIntoConstraints = false
         uiLabel.text = "100.000"
@@ -45,90 +49,73 @@ class HomeNavigation : UIView {
         uiLabel.frame.size = CGSize(width: labelAmountSize.width, height: labelAmountSize.height)
         return uiLabel
     }()
-    lazy var bePointIcon : UIImageView = {
+    private lazy var bePointIcon : UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.frame.size = CGSize(width: 16.67, height: 16.67)
+//        icon.frame.size = CGSize(width: 16.67, height: 16.67)
+        icon.contentMode = .scaleAspectFit
         icon.image = UIImage(named: "Icon-Color-bePoint")
         return icon
     }()
 
-    
-    lazy var homeNavigationInner : UIView = {
+     
+    private lazy var homeNavigationInner : UIView = {
         let inner = UIView()
         inner.translatesAutoresizingMaskIntoConstraints = false
 //        inner.backgroundColor = .green
         return inner
     }()
+    
+    private var frameLayouts = VStackLayout()
 
     override init(frame : CGRect) {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
-        //add right Bepoint UI to button
-        bePointButton.addSubview(bePointAmount)
-        bePointButton.addSubview(bePointIcon)
+        self.backgroundColor = .orange
+
+        addSubview(welcomeLabel)
+//        addSubview(bePointIcon)
+//        addSubview(bePointAmount)
         
-        //add button to UI inner
-        homeNavigationInner.addSubview(bePointButton)
+        frameLayouts.with {
+            ($0 + 0).flexible()
+            $0 + HStackLayout {
+                $0 + welcomeLabel
+                ($0 + 0).flexible()
+//                ($0 + bePointButton)
+                $0 + HStackLayout {
+                    $0.backgroundColor = UIColor(red: 94/255, green: 109/255, blue: 132/255, alpha: 0.5)
+                    $0 + bePointAmount
+                    $0 + 7.67
+                    $0 + bePointIcon
+                    $0.padding(top: 6, left: 12, bottom: 6, right: 12)
+                    
+//                    $0.layer.cornerRadius = $0.bounds.size.height / 2
+                    $0.didLayoutSubviews {
+                        $0.layer.cornerRadius = $0.bounds.size.height / 2
+                        $0.layer.masksToBounds = true
+                    }
+                }
+                    
+            }
+//            $0.debug = true
+            $0.padding(top: 0, left: 16, bottom: 12, right: 16)
+        }
         
-        //add welcome label to UI inner
-        homeNavigationInner.addSubview(welcomeLabel)
+        addSubview(frameLayouts)
         
-        //add inner to top screen UI
-        addSubview(homeNavigationInner)
-        //add top screen constraints
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let targetFrame = frameLayouts.sizeThatFits(self.bounds.size)
+        print(targetFrame)
+        frameLayouts.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: targetFrame.height + safeAreaInsets.top + 70)
         
-        addHomeNavigationConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func addHomeNavigationConstraints() {
-        let innerButtonPadding = (bePointButton.bounds.height - 16.67) / 2
-
-        
-        let welcomeLabelConstraints = [
-            welcomeLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            welcomeLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            
-            welcomeLabel.centerYAnchor.constraint(equalTo: homeNavigationInner.centerYAnchor),
-            welcomeLabel.leftAnchor.constraint(equalTo: homeNavigationInner.leftAnchor, constant: 16),
-        ]
-        NSLayoutConstraint.activate(welcomeLabelConstraints)
-        
-        let bePointIconConstraints = [
-            bePointIcon.centerYAnchor.constraint(equalTo: bePointButton.centerYAnchor),
-            bePointIcon.rightAnchor.constraint(equalTo: bePointButton.rightAnchor, constant: -innerButtonPadding),
-            bePointIcon.widthAnchor.constraint(equalToConstant: 16.67),
-            bePointIcon.heightAnchor.constraint(equalToConstant: 16.67)
-        ]
-        NSLayoutConstraint.activate(bePointIconConstraints)
-        
-        let bePointAmountConstraints = [
-            bePointAmount.centerYAnchor.constraint(equalTo: bePointButton.centerYAnchor),
-            bePointAmount.rightAnchor.constraint(equalTo: bePointIcon.leftAnchor, constant: -innerButtonPadding)
-        ]
-        NSLayoutConstraint.activate(bePointAmountConstraints)
-
-        let bePointButtonConstraints = [
-            bePointButton.rightAnchor.constraint(equalTo: homeNavigationInner.rightAnchor, constant: -16),
-            bePointButton.leftAnchor.constraint(equalTo: bePointAmount.leftAnchor, constant: -(innerButtonPadding + 5)),
-            bePointButton.topAnchor.constraint(equalTo: homeNavigationInner.topAnchor, constant: (innerButtonPadding + 5)),
-            bePointButton.bottomAnchor.constraint(equalTo: homeNavigationInner.bottomAnchor, constant: -(innerButtonPadding + 5)),
-            welcomeLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor)
-        ]
-        NSLayoutConstraint.activate(bePointButtonConstraints)
-
-        let topScreenInnerConstraints = [
-            homeNavigationInner.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            homeNavigationInner.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            homeNavigationInner.leftAnchor.constraint(equalTo: self.leftAnchor),
-            homeNavigationInner.rightAnchor.constraint(equalTo: self.rightAnchor),
-        ]
-
-        NSLayoutConstraint.activate(topScreenInnerConstraints)
     }
     
     func toggleBackground(flag : Bool) {

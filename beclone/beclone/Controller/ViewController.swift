@@ -80,12 +80,17 @@ class ViewController: UIViewController {
         collectionView.isPagingEnabled = true
  
         view.addSubview(homeNavigation)
-        
-        view.addSubview(uiGradientBackground)
-
-        view.addSubview(collectionView)
-
-        addConstraints()
+//
+//        view.addSubview(uiGradientBackground)
+//
+//        view.addSubview(collectionView)
+//
+//        addConstraints()
+        NSLayoutConstraint.activate([
+            homeNavigation.topAnchor.constraint(equalTo: view.topAnchor),
+            homeNavigation.leftAnchor.constraint(equalTo: view.leftAnchor),
+            homeNavigation.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
     }
     
     func addConstraints() {
@@ -111,7 +116,7 @@ class ViewController: UIViewController {
     
     func setHeightForGradientBackground() {
         guard topBackgroundConstraints == nil else { return } //topBackground is only set one time
-        
+//        print(collectionView.cellForItem(at: IndexPath(item: 1, section: 2)))
         guard let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2))
         else { return }
         
