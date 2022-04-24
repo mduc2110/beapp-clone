@@ -19,16 +19,6 @@ class ViewController: UIViewController {
     
     var sectionsData : [CollectionSectionController] = []
     
-//    var sectionsData : [SectionModel] = []
-    
-    lazy var viewFrame = self.view.frame
-    
-//    lazy var creator = UIHomeScreenCreator(parentController: self, parentFrame: self.viewFrame)
-    
-    var homeScreenCollectionViewCreator = HomeScreenCollectionViewCreator()
-    
-    var homeScreenCollectionView : UICollectionView?
-    
     var homeScreenManager = HomeScreenManager()
     
 //    var collectionView = HomeCollectionView()
@@ -36,7 +26,10 @@ class ViewController: UIViewController {
     private lazy var collectionView : UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let cv = HomeCollectionView(frame: .zero, collectionViewLayout: layout)
-//        cv.tran
+//        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+//        cv.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        
+        cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
     
@@ -77,10 +70,6 @@ class ViewController: UIViewController {
     
 //    var homeSectionController : HomeSectionController?
 
-    var timer : Timer?
-    
-    var currentCellIndex = 0
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -100,38 +89,48 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         collectionView.isPagingEnabled = true
         
-        view.addSubview(uiGradientBackground)
+//        view.addSubview(uiGradientBackground)
+//
+//        backgroundFrameLayout.with {
+//            ($0 + uiGradientBackground).flexible()
+//        }
+//
+//        view.addSubview(homeNavigation)
+//        view.addSubview(collectionView)
+//
+//        view.addSubview(bgr)
+//
+////        frameLayouts.removeAll()
+//
+//        frameLayouts.with {
+//            ($0 + homeNavigation)
+//            ($0 + collectionView).flexible()
+//        }
+//
+//        view.addSubview(frameLayouts)
         
-        backgroundFrameLayout.with {
-            ($0 + uiGradientBackground).flexible()
-        }
- 
-        view.addSubview(homeNavigation)
         view.addSubview(collectionView)
-        
-        view.addSubview(bgr)
-        
-//        frameLayouts.removeAll()
-        
-        frameLayouts.with {
-            ($0 + homeNavigation)
-            ($0 + collectionView).flexible()
-        }
-        
-        view.addSubview(frameLayouts)
+//
+//
+//
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+//        collectionView.frame = view.bounds
 //        homeScreenCollectionView.frame = view.bounds
 //        let targetFrame = frameLayouts.sizeThatFits(view.bounds.size)
-        frameLayouts.frame = view.bounds//CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
-        
-        print(collectionView.frame)
+//        frameLayouts.frame = view.bounds//CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
         print(collectionView.numberOfSections)
         
         
-        setHeightForGradientBackground()
+//        setHeightForGradientBackground()
     }
     
     func setHeightForGradientBackground() {
@@ -179,46 +178,60 @@ extension ViewController : UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sectionsData.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sectionsData[section].cellControllers.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return cellController(at: indexPath).cell(for: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         cellController(at: indexPath).display()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         cellController(at: indexPath).endDisplay()
     }
-    
+
     private func cellController(at indexPath: IndexPath) -> CollectionCellController {
         return sectionsData[indexPath.section].cellControllers[indexPath.item]
     }
 
 }
 
+//extension ViewController : UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return sectionsData.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
+//        cell.backgroundColor = .red
+//        return cell
+//    }
+//
+//
+//}
+
 extension ViewController : UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        print("User tapped on item \(indexPath.row)")
     }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView == collectionView else { return }
-        
-        let contentOffset = scrollView.contentOffset.y
-        updateGradientBackgroundHeight(contentOffset)
-
-//        print(view.safeAreaInsets.top)
-        if contentOffset >= homeNavigation.bounds.height && homeNavigation.bounds.height != 0 {
-            homeNavigation.toggleBackground(flag: true)
-        } else {
-            homeNavigation.toggleBackground(flag: false)
-        }
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard scrollView == collectionView else { return }
+//
+//        let contentOffset = scrollView.contentOffset.y
+//        updateGradientBackgroundHeight(contentOffset)
+//
+////        print(view.safeAreaInsets.top)
+//        if contentOffset >= homeNavigation.bounds.height && homeNavigation.bounds.height != 0 {
+//            homeNavigation.toggleBackground(flag: true)
+//        } else {
+//            homeNavigation.toggleBackground(flag: false)
+//        }
+//    }
 }
 
 
@@ -255,17 +268,18 @@ extension ViewController : HomeScreenManagerDelegate {
                         if index == 10 { break }
                         cellControllers.append(ServicesCellController(services: item))
                     }
-                    
+
                 }
-                
+
                 return CollectionSectionController(cellControllers: cellControllers)
             case .banner:
+//            default:
                 let imageBannerList = [
                     "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png",
                     "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png",
                     "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png"
                 ]
-                
+
                 let cellController = BannerController(imageList: imageBannerList)
                 return CollectionSectionController(cellControllers: [cellController,
 //                 cellController, cellController])
@@ -278,7 +292,6 @@ extension ViewController : HomeScreenManagerDelegate {
 //        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
-//            self?.homeScreenCollectionView?.reloadData()
         }
     }
 }
