@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import FrameLayoutKit
 
 class LocationCell : UICollectionViewCell {
     let label = UILabel()
@@ -15,6 +16,8 @@ class LocationCell : UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
     }
+    
+    private let frameLayout = HStackLayout()
     
     private func setupUI() {
         //cell styling
@@ -26,17 +29,17 @@ class LocationCell : UICollectionViewCell {
         label.font = UIFont(name: "AvenirNext", size: 14)
         label.textAlignment = .center
         label.textColor = UIColor(red: 8/255, green: 31/255, blue: 66/255, alpha: 1)
-        label.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(label)
-        
-        //constraints
-        label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
-        label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
-        label.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-
-        label.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        frameLayout.with {
+            ($0 + label)
+          $0.padding(top: 6, left: 16, bottom: 6, right: 16)
+        }
+        contentView.addSubview(frameLayout)
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        frameLayout.frame = contentView.bounds
     }
     
     required init?(coder: NSCoder) {
@@ -44,6 +47,6 @@ class LocationCell : UICollectionViewCell {
     }
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return label.sizeThatFits(size)
+        return frameLayout.sizeThatFits(size)
     }
 }

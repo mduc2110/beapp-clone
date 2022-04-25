@@ -167,11 +167,12 @@ extension TransportCell : UICollectionViewDataSource {
 extension TransportCell : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cell = LocationCell()
+        cell.label.text = dummyAddress[indexPath.row]
 
         let viewSize = collectionView.bounds.size
 
         let autoFitSize = cell.sizeThatFits(viewSize)
-        return CGSize(width: autoFitSize.width, height: 32)
+        return CGSize(width: autoFitSize.width, height: autoFitSize.height)
     }
 //
     
