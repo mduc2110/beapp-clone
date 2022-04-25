@@ -21,8 +21,6 @@ class NativeBannerCell : UICollectionViewCell {
     }
     
     func setImage(imageUrl : String) {
-        uiImage.translatesAutoresizingMaskIntoConstraints = false
-  
         uiImage.load(urlString: imageUrl)
         
         contentView.addSubview(uiImage)

@@ -29,7 +29,6 @@ class ViewController: UIViewController {
 //        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //        cv.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
-        cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
     
@@ -40,48 +39,21 @@ class ViewController: UIViewController {
 //        rootView.backgroundColor = .orange
         return background
     }()
-    
-    private lazy var bgr : UIView = {
-        let ui = UIView()
-        ui.backgroundColor = .none
-//        rootView.uiColor = .orange
-        return ui
-    }()
-    
-    private lazy var labell : UILabel = {
-        let ui = UILabel()
-        ui.backgroundColor = .green
-        ui.text = "Label"
-//        rootView.uiColor = .orange
-        return ui
-    }()
-    
+
     private let frameLayouts = VStackLayout()
     
     private var backgroundFrameLayout = HStackLayout()
     
     var homeNavigation = HomeNavigation()
     
-    var topBackgroundConstraints : NSLayoutConstraint?
-    
     var defaultGradientBackgroundHeight : CGFloat? = 394
     
-    var height2 : CGFloat?
-    
-//    var homeSectionController : HomeSectionController?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
         
         homeScreenManager.delegate = self
         homeScreenManager.getHomeData()
-        
-//        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
-//        let controller = UIViewController()
-//        view.addSubview(controller.view)
-//        didMove(toParent: <#T##UIViewController?#>)
-        
     }
 
     func initView() {
@@ -89,85 +61,40 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         collectionView.isPagingEnabled = true
         
-//        view.addSubview(uiGradientBackground)
-//
-//        backgroundFrameLayout.with {
-//            ($0 + uiGradientBackground).flexible()
-//        }
-//
-//        view.addSubview(homeNavigation)
-//        view.addSubview(collectionView)
-//
-//        view.addSubview(bgr)
-//
-////        frameLayouts.removeAll()
-//
-//        frameLayouts.with {
-//            ($0 + homeNavigation)
-//            ($0 + collectionView).flexible()
-//        }
-//
-//        view.addSubview(frameLayouts)
-        
+        view.addSubview(uiGradientBackground)
+        view.addSubview(homeNavigation)
         view.addSubview(collectionView)
-//
-//
-//
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+
+        frameLayouts.with {
+            ($0 + homeNavigation)
+            ($0 + collectionView).flexible()
+        }
+
+        view.addSubview(frameLayouts)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        collectionView.frame = view.bounds
 //        homeScreenCollectionView.frame = view.bounds
 //        let targetFrame = frameLayouts.sizeThatFits(view.bounds.size)
-//        frameLayouts.frame = view.bounds//CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
-        print(collectionView.numberOfSections)
-        
-        
-//        setHeightForGradientBackground()
+        frameLayouts.frame = view.bounds//CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
+
+        setHeightForGradientBackground(with: self.collectionView)
     }
     
-    func setHeightForGradientBackground() {
-        guard topBackgroundConstraints == nil else { return } //topBackground is only set one time
-//        guard let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2)) else { return }
+    func setHeightForGradientBackground(with collectionView : UICollectionView?) {
+        guard let collectionView = collectionView,
+              let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2))
+        else { return }
+        let targetFrame = collectionView.convert(cell.frame, to: view)
+        let safeHeightInset = targetFrame.origin.y - 16
         
-//        let targetFrame = collectionView.convert(cell.frame, to: view)
-//
-//        let safeHeightInset = targetFrame.origin.y - 16
-        
-//        defaultGradientBackgroundHeight = safeHeightInset
-//        addBackgroundConstraints(safeHeightInset)
-
-        backgroundFrameLayout.edgeInsets.top = defaultGradientBackgroundHeight!
-        backgroundFrameLayout.frame = view.bounds
+        defaultGradientBackgroundHeight = safeHeightInset
+        uiGradientBackground.frame = CGRect(x: 0, y: defaultGradientBackgroundHeight!, width: view.bounds.width, height: view.bounds.height)
     }
-    
-    func addBackgroundConstraints(_ top : CGFloat) {
-        topBackgroundConstraints = uiGradientBackground.topAnchor.constraint(equalTo: view.topAnchor, constant: top)
-
-        let constraints = [
-            topBackgroundConstraints!,
-            uiGradientBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            uiGradientBackground.leftAnchor.constraint(equalTo: view.leftAnchor),
-            uiGradientBackground.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-
     func updateGradientBackgroundHeight(_ contentOffset : CGFloat) {
-        
-//        topBackgroundConstraints?.constant = defaultGradientBackgroundHeight! - contentOffset
-        backgroundFrameLayout.removeAll()
-        backgroundFrameLayout.edgeInsets.top = defaultGradientBackgroundHeight! - contentOffset
-        height2 = defaultGradientBackgroundHeight! - contentOffset
-        backgroundFrameLayout.frame = view.bounds
-//        uiGradientBackground.layoutIfNeeded()
+        uiGradientBackground.setNeedsLayout()
+        uiGradientBackground.frame.origin.y = defaultGradientBackgroundHeight! - contentOffset
 
     }
 
@@ -201,37 +128,21 @@ extension ViewController : UICollectionViewDataSource {
 
 }
 
-//extension ViewController : UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return sectionsData.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
-//        cell.backgroundColor = .red
-//        return cell
-//    }
-//
-//
-//}
-
 extension ViewController : UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        print("User tapped on item \(indexPath.row)")
     }
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard scrollView == collectionView else { return }
-//
-//        let contentOffset = scrollView.contentOffset.y
-//        updateGradientBackgroundHeight(contentOffset)
-//
-////        print(view.safeAreaInsets.top)
-//        if contentOffset >= homeNavigation.bounds.height && homeNavigation.bounds.height != 0 {
-//            homeNavigation.toggleBackground(flag: true)
-//        } else {
-//            homeNavigation.toggleBackground(flag: false)
-//        }
-//    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView == collectionView else { return }
+
+        let contentOffset = scrollView.contentOffset.y
+        updateGradientBackgroundHeight(contentOffset)
+        if contentOffset >= homeNavigation.bounds.height && homeNavigation.bounds.height != 0 {
+            homeNavigation.toggleBackground(flag: true)
+        } else {
+            homeNavigation.toggleBackground(flag: false)
+        }
+    }
 }
 
 
@@ -268,9 +179,7 @@ extension ViewController : HomeScreenManagerDelegate {
                         if index == 10 { break }
                         cellControllers.append(ServicesCellController(services: item))
                     }
-
                 }
-
                 return CollectionSectionController(cellControllers: cellControllers)
             case .banner:
 //            default:
@@ -281,9 +190,7 @@ extension ViewController : HomeScreenManagerDelegate {
                 ]
 
                 let cellController = BannerController(imageList: imageBannerList)
-                return CollectionSectionController(cellControllers: [cellController,
-//                 cellController, cellController])
-                ])
+                return CollectionSectionController(cellControllers: [cellController])
                 
             default:
                 return CollectionSectionController(cellControllers: [])
@@ -292,6 +199,9 @@ extension ViewController : HomeScreenManagerDelegate {
 //        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                self?.setHeightForGradientBackground(with: self?.collectionView)
+            })
         }
     }
 }
