@@ -12,7 +12,7 @@ class NativeBannerCell : UICollectionViewCell {
     static let nativeBannerId = "NativeBannerId"
     static let nativeBannerIdentifier = "nativeBannerIdentifier"
     
-    let uiImage = UIImageView()
+    private let uiImage = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

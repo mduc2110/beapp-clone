@@ -23,17 +23,6 @@ struct DataSectionModel {
     let title_key: String
     let promoted: Int
     let need_updated: Bool
-    
-    
-    
-    
-//    let android_version: Int
-//    let ios_version: Int
-//    let max_android_version: Int
-//    let max_ios_version: Int
-    
-//    let feature_toggle: String
-//    let disabled_image: String
 }
 
 struct Label {

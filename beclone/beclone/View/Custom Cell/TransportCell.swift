@@ -17,13 +17,10 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
     
     //UI List Address Button
     private lazy var addressListCollectionView : UICollectionView = {
-//        var collectionView = UICollectionView()
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.scrollDirection = .horizontal
         
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
-//        layout.itemSize = CGSize(width: 60, height: 32)
         var collectionView = UICollectionView(frame: contentView.frame, collectionViewLayout: layout)
         collectionView.alwaysBounceHorizontal = true
         collectionView.register(LocationCell.self, forCellWithReuseIdentifier: addressCellIdentifier)
@@ -72,11 +69,9 @@ class TransportCell : UICollectionViewCell, UICollectionViewDelegate {
     //UI Text Field
     private lazy var currentAddressTextField : UITextField = {
         let textField = UITextField()
-        textField.addBorder(toSide: .Bottom, withColor: CGColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1), andThickness: 0.2)
         textField.text = "146 Nguyễn Đình Chiều, Phường Võ Thị Sáu Quận 3"
         textField.textColor = .black
         textField.font = UIFont.boldSystemFont(ofSize: 14)
-        textField.setBottomBorder(color: UIColor(red: 242/255, green: 245/255, blue: 247/255, alpha: 1))
 //        textField.becomeFirstResponder()
         return textField
     }()

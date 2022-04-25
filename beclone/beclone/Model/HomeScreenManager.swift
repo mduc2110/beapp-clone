@@ -43,8 +43,6 @@ struct HomeScreenManager {
             "Content-Type" : "application/json",
             "access_token" : K.accessToken
         ]
-//        var session = URLSession(configuration: .default)
-//        URLSession.shared.uploadTask(with: <#T##URLRequest#>, from: <#T##Data#>)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
@@ -56,49 +54,13 @@ struct HomeScreenManager {
         task.resume()
         
     }
-    
-//    func demo() throws -> Int {
-//        if true {
-//            return 1
-//        } else {
-//            throw NSError()
-//        }
-//    }
-    
     private func parseJSON(with data : Data) {
         
         if let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let array = responseJSON["sessions"] as? [[String: Any]],
            let backgroundImage = responseJSON["background_image"] as? String
         {
-//            let sessions = array.map ({ (item) -> SessionModel? in
-//                if let id = item["id"] as? Int,
-//                   let name = item["name"] as? String,
-//                   let order = item["order"] as? Int,
-//                   let type = item["type"] as? String,
-////                   let data = item["data"] as? [String],
-//                   let metaData = item["meta_data"] as? [String: Any],
-////                   let title = item["title"],
-//                   let hash = item["hash"] as? String {
-//
-////                    let data = data.map({ item -> DataSectionModel? in
-//////                        if let id = item {
-////                            print(item)
-//////                        }
-////                        return nil
-////                    })
-////                    let meta = metaData.map { [$0.key : $0.value] }
-////                    print(meta)
-////                    return nil
-//                    return SessionModel(id: id, name: name, order: order, type: type, metaData: metaData,  hash: hash)
-//
-//                }
-//                else {
-//                    return nil
-//                }
-//
-//
-//            })
+
 
             setSessionData(sessionsData: array.toSections())
             setBackground(urlBackground: backgroundImage)
@@ -106,7 +68,6 @@ struct HomeScreenManager {
     }
     
     func setBackground(urlBackground : String) {
-//        print(urlBackground)
         self.delegate?.didSetBackgroundForHomeScreen(urlBackground: urlBackground)
     }
     

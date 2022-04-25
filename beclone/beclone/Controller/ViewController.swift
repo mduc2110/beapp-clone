@@ -17,17 +17,13 @@ class ViewController: UIViewController {
     
     private let cellIdentifier : String = String(describing: UICollectionViewCell.self)
     
-    var sectionsData : [CollectionSectionController] = []
+    private var sectionsData : [CollectionSectionController] = []
     
-    var homeScreenManager = HomeScreenManager()
-    
-//    var collectionView = HomeCollectionView()
+    private var homeScreenManager = HomeScreenManager()
     
     private lazy var collectionView : UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let cv = HomeCollectionView(frame: .zero, collectionViewLayout: layout)
-//        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        cv.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
         return cv
     }()
@@ -36,7 +32,6 @@ class ViewController: UIViewController {
         let background = UIView()
         background.backgroundColor = .white
         background.layer.cornerRadius =  6
-//        rootView.backgroundColor = .orange
         return background
     }()
 
@@ -44,9 +39,9 @@ class ViewController: UIViewController {
     
     private var backgroundFrameLayout = HStackLayout()
     
-    var homeNavigation = HomeNavigation()
+    private var homeNavigation = HomeNavigation()
     
-    var defaultGradientBackgroundHeight : CGFloat? = 394
+    private var defaultGradientBackgroundHeight : CGFloat? = 394
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +51,7 @@ class ViewController: UIViewController {
         homeScreenManager.getHomeData()
     }
 
-    func initView() {
+    private func initView() {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.isPagingEnabled = true
@@ -75,14 +70,12 @@ class ViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        homeScreenCollectionView.frame = view.bounds
-//        let targetFrame = frameLayouts.sizeThatFits(view.bounds.size)
-        frameLayouts.frame = view.bounds//CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
+        frameLayouts.frame = view.bounds
 
         setHeightForGradientBackground(with: self.collectionView)
     }
     
-    func setHeightForGradientBackground(with collectionView : UICollectionView?) {
+    private func setHeightForGradientBackground(with collectionView : UICollectionView?) {
         guard let collectionView = collectionView,
               let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 2))
         else { return }
@@ -92,7 +85,7 @@ class ViewController: UIViewController {
         defaultGradientBackgroundHeight = safeHeightInset
         uiGradientBackground.frame = CGRect(x: 0, y: defaultGradientBackgroundHeight!, width: view.bounds.width, height: view.bounds.height)
     }
-    func updateGradientBackgroundHeight(_ contentOffset : CGFloat) {
+    private func updateGradientBackgroundHeight(_ contentOffset : CGFloat) {
         uiGradientBackground.setNeedsLayout()
         uiGradientBackground.frame.origin.y = defaultGradientBackgroundHeight! - contentOffset
 
@@ -182,7 +175,6 @@ extension ViewController : HomeScreenManagerDelegate {
                 }
                 return CollectionSectionController(cellControllers: cellControllers)
             case .banner:
-//            default:
                 let imageBannerList = [
                     "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png",
                     "https://drivadz.vn/media/uploads/cms/47180256_309663653211557_5252010709629272064_n.png",
@@ -196,7 +188,6 @@ extension ViewController : HomeScreenManagerDelegate {
                 return CollectionSectionController(cellControllers: [])
             }
         }
-//        self.homeSectionController = HomeSectionController(sectionsData: sectionsData)
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {

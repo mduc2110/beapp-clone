@@ -12,6 +12,7 @@ class ServicesCellController : CollectionCellController {
     let services : DataSectionModel?
     private var cell : CategoryCell?
     private var indexPath : IndexPath?
+    
     init(services : DataSectionModel?) {
         self.services = services
     }

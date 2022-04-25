@@ -10,11 +10,6 @@ import UIKit
 
 class BannerController : CollectionCellController {
     private var cell : BannerCell?
-    
-    var timer : Timer?
-    
-    var currentCellIndex = 0
-    
     var imageBannerList : [String]
     
     init(imageList : [String]) {
@@ -26,9 +21,11 @@ class BannerController : CollectionCellController {
         cell = myCell as? BannerCell
         return myCell
     }
+    
     func display() {
         cell?.initData(data: imageBannerList)
     }
+    
     func endDisplay() {
         cell = nil
     }

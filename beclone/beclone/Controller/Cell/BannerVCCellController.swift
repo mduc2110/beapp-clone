@@ -8,15 +8,17 @@
 import UIKit
 
 class BannerVCCellController : CollectionCellController {
-    var bannerCell : UICollectionViewCell?
-    var urlString : String
-    func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OK", for: indexPath)
-        bannerCell = cell
-        return cell
-    }
+    private var bannerCell : UICollectionViewCell?
+    private var urlString : String
+    
     init(urlString: String) {
         self.urlString = urlString
+    }
+    
+    func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCell.bannerItemCellIdentifier, for: indexPath)
+        bannerCell = cell
+        return cell
     }
     func display() {
         guard let safeBannerCell = bannerCell else { return }

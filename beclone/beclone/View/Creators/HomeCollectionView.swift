@@ -24,8 +24,6 @@ class HomeCollectionView : UICollectionView {
         register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.categoryCellIdentifier)
         
         register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.bannerCellIdentifier)
-    
-//        translatesAutoresizingMaskIntoConstraints = false
         
         collectionViewLayout = createCompositionalLayout()// need to create compositional first
         
@@ -79,8 +77,6 @@ class HomeCollectionView : UICollectionView {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets.bottom = 16
         
-//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(160/328))
-        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(172))
 
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -91,7 +87,6 @@ class HomeCollectionView : UICollectionView {
 
         section.orthogonalScrollingBehavior = .groupPaging //horizontal scrolling
 
-//        let layout = UICollectionViewCompositionalLayout(section: section)
         
         return section
     }
@@ -117,7 +112,6 @@ class HomeCollectionView : UICollectionView {
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-//        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(16), top: .fixed(16), trailing: .flexible(16), bottom: .fixed(16))
         item.contentInsets = .init(top: 0, leading: 16, bottom: 32, trailing: 16)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1000))
@@ -125,8 +119,6 @@ class HomeCollectionView : UICollectionView {
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
-//        group.contentInsets.bottom = 16
-        
         //nested group
         
         let parentGroup = NSCollectionLayoutGroup.vertical(
@@ -143,9 +135,6 @@ class HomeCollectionView : UICollectionView {
         let sectionStyling = NSCollectionLayoutDecorationItem.background(elementKind: CategoryCell.decorationKind)
         
         section.decorationItems = [sectionStyling]
-//        section.contentInsets.leading = 15
-        
-//        section.orthogonalScrollingBehavior = .groupPaging //horizontal scrolling
 
         return section
     }
@@ -169,22 +158,4 @@ class HomeCollectionView : UICollectionView {
         return section
     }
 
-    func thirdLayoutSection() -> NSCollectionLayoutSection {
-        
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets.bottom = 15
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .fractionalWidth(0.35))
-
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = .init(top: 0, leading: 15, bottom: 0, trailing: 2)
-
-        let section = NSCollectionLayoutSection(group: group)
-
-        section.orthogonalScrollingBehavior = .continuous
-
-        return section
-    }
 }

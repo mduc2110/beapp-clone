@@ -12,18 +12,14 @@ import FrameLayoutKit
 
 class BannerCell : UICollectionViewCell {
     static let bannerCellIdentifier = "bannerCellIdentifier"
-    
+    static let bannerItemCellIdentifier = "bannerItemCellIdentifier"
     private var timer : Timer?
-    
     private var currentCellIndex = 0
-    
     private var source : [BannerVCCellController] = []
-    
     private var imageBannerList : [String]?
-    
     private let frameLayout = VStackLayout()
     
-    lazy var bannerCollectionView : UICollectionView = {
+    private lazy var bannerCollectionView : UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -31,13 +27,13 @@ class BannerCell : UICollectionViewCell {
         
         var collectionView = UICollectionView(frame: contentView.frame, collectionViewLayout: layout)
         collectionView.alwaysBounceHorizontal = true
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "OK")
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: BannerCell.bannerItemCellIdentifier)
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.isPagingEnabled = true
         return collectionView
     }()
     
-    lazy var pageControl : UIPageControl = {
+    private lazy var pageControl : UIPageControl = {
         let pageControlView = UIPageControl()
         return pageControlView
     }()
@@ -77,7 +73,7 @@ class BannerCell : UICollectionViewCell {
         frameLayout.frame = contentView.bounds
         
         let pageControlTarget = pageControl.sizeThatFits(contentView.bounds.size)
-        print(pageControlTarget.width)
+
         pageControl.frame = CGRect(
             x: contentView.bounds.size.width / 2 - pageControlTarget.width / 2,
             y: contentView.bounds.height - pageControlTarget.height,

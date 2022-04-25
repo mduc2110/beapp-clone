@@ -9,11 +9,8 @@ import Foundation
 import UIKit
 
 class TransportCellController : CollectionCellController {
-//    let services: [DataSectionModel]
     private var cell : TransportCell?
-//    init(services : [DataSectionModel]) {
-//        self.services = services
-//    }
+    
     func cell(for collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: TransportCell.tripCellIdentifier, for: indexPath)
         cell = myCell as? TransportCell
@@ -21,7 +18,6 @@ class TransportCellController : CollectionCellController {
     }
     
     func display() {
-//        cell.configure(category: services[indexPath.row])
     }
     
     func endDisplay() {
