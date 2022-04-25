@@ -89,13 +89,6 @@
 			path = "Custom Cell";
 			sourceTree = "<group>";
 		};
-		B998EED5280588940069624C /* Creators */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Creators;
-			sourceTree = "<group>";
-		};
 		B998EEDB280673F20069624C /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,7 +160,6 @@
 			isa = PBXGroup;
 			children = (
 				B998EEDB280673F20069624C /* Components */,
-				B998EED5280588940069624C /* Creators */,
 				B998EECE27FFD8BF0069624C /* Custom Cell */,
 				B9E9DAFB27FAF17400CEDC71 /* Main.storyboard */,
 			);
